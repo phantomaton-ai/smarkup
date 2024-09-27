@@ -7,12 +7,13 @@ function smarkup(input) {
         if (line.startsWith('/')) {
             // Start of a new directive
             if (currentDirective) {
+                currentDirective.body = currentDirective.body.join('\n');
                 directives.push(currentDirective);
             }
             currentDirective = {
                 action: line.slice(1).split('(')[0],
                 attributes: {},
-                body: []
+                body: ''
             };
             let args = line.slice(1).split('(')[1];
             if (args) {
@@ -29,11 +30,12 @@ function smarkup(input) {
             currentDirective = null;
         } else if (currentDirective) {
             // Add line to current directive body
-            currentDirective.body.push(line);
+            currentDirective.body += line + '\n';
         }
     }
 
     if (currentDirective) {
+        currentDirective.body = currentDirective.body.trim();
         directives.push(currentDirective);
     }
 
