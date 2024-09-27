@@ -9,10 +9,7 @@ class Smarkup {
     let curr = null;
 
     for (let line of lines) {
-      if (line.startsWith(this.symbols.directive.start)) {
-        if (curr) {
-          dir = this.pushDirective(dir, { ...curr, body: curr.body.join('\n') });
-        }
+      if (!curr && line.startsWith(this.symbols.directive.start)) {
         let start = this.symbols.directive.start.length;
         let end = line.indexOf(this.symbols.arguments.start, start);
         let action = line.slice(start, end).trim();
@@ -49,9 +46,9 @@ class Smarkup {
       let output = `${this.symbols.directive.start}${directive.action}${this.symbols.arguments.start}`;
       const args = [];
       for (let [key, value] of Object.entries(directive.attributes)) {
-        args.push(`${key}${this.symbols.pair.separator} ${value}`);
+        args.push(`${key}${this.symbols.pair.separator}${value}`);
       }
-      output += args.join(`, `);
+      output += args.join(this.symbols.arguments.separator);
       output += `${this.symbols.arguments.end}`;
       if (directive.body !== undefined) {
         output += ` ${this.symbols.body.start}\n${directive.body.trimStart()}\n${this.symbols.body.end} ${directive.action}${this.symbols.directive.end}`;
@@ -60,11 +57,6 @@ class Smarkup {
       }
       return output.trim();
     }).join('\n');
-  }
-
-  pushDirective(directives, directive) {
-    directives.push(directive);
-    return directives;
   }
 }
 
