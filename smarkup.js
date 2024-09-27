@@ -20,7 +20,7 @@ const DEFAULTS = {
 };
 
 function joinBody(body) {
-  return Array.isArray(body) ? body.join('\n') : body;
+  return Array.isArray(body) ? body.join('\n') : body || '';
 }
 
 function pushDirective(directives, directive) {
@@ -45,21 +45,21 @@ function smarkup(input, opts = {}) {
       start = end + 1;
       end = line.lastIndexOf(sym.args.end);
       let args = line.slice(start, end);
-      curr = { action, attributes: {}, body: '' };
+      curr = { action, attributes: {}, body: [] };
       let pairs = args.split(sym.args.separator).filter(pair => pair.includes(sym.args.pair.separator));
       for (let pair of pairs) {
         let [key, value] = pair.split(sym.args.pair.separator, 2);
         curr.attributes[key.trim()] = value.trim();
       }
+    } else if (line.startsWith(sym.body.start)) {
+      let bodyStart = sym.body.start.length;
+      let bodyEnd = line.indexOf(sym.body.end, bodyStart);
+      curr.body.push(line.slice(bodyStart, bodyEnd));
     } else if (line.startsWith(sym.body.end)) {
       dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
       curr = null;
     } else if (curr) {
-      if (Array.isArray(curr.body)) {
-        curr.body.push(line);
-      } else {
-        curr.body = line;
-      }
+      curr.body.push(line);
     }
   }
 
