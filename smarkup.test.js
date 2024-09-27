@@ -138,4 +138,37 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
       }
     ]);
   });
+
+  it('should handle custom symbols', () => {
+    const input = '🪄createProject(🎀name🎑:test🥰)';
+    const directives = smarkup(input, {
+      symbols: {
+        directive: {
+          start: '🪄',
+          end: '🥰'
+        },
+        args: {
+          start: '🎀',
+          separator: '🎑',
+          pair: {
+            separator: '🎑'
+          },
+          end: '🥰'
+        },
+        body: {
+          start: '🌟',
+          end: '✨'
+        }
+      }
+    });
+    expect(directives).to.deep.equal([
+      {
+        action: 'createProject',
+        attributes: {
+          name: 'test'
+        },
+        body: ''
+      }
+    ]);
+  });
 });
