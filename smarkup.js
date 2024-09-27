@@ -1,6 +1,6 @@
 class Smarkup {
-  constructor(options = {}) {
-    this.symbols = { ...DEFAULTS.symbols, ...options.symbols };
+  constructor(options) {
+    this.symbols = options.symbols;
   }
 
   parse(input) {
@@ -70,9 +70,8 @@ const DEFAULTS = {
   }
 };
 
-function smarkup(input, opts = {}) {
-  const smarkup = new Smarkup(opts);
-  return smarkup.parse(input);
+function smarkup(opts = DEFAULTS) {
+  return new Smarkup(opts);
 }
 
 export default smarkup;

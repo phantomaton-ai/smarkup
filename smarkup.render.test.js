@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Smarkup } from './smarkup.js';
+import smarkup from './smarkup.js';
 
 describe('Smarkup renderer', () => {
   it('should render a simple directive', () => {
@@ -12,8 +12,7 @@ describe('Smarkup renderer', () => {
         body: undefined
       }
     ];
-    const parser = new Smarkup();
-    const output = parser.render(directives);
+    const output = smarkup().render(directives);
     expect(output).to.equal('/createProject(name:test)');
   });
 
@@ -28,8 +27,7 @@ describe('Smarkup renderer', () => {
         body: 'This is the content.'
       }
     ];
-    const parser = new Smarkup();
-    const output = parser.render(directives);
+    const output = smarkup().render(directives);
     expect(output).to.equal('/writeProjectFile(project:smarkup, file:example.txt) {\nThis is the content.\n} writeProjectFile!');
   });
 
@@ -51,8 +49,7 @@ describe('Smarkup renderer', () => {
         body: 'This is the content.'
       }
     ];
-    const parser = new Smarkup();
-    const output = parser.render(directives);
+    const output = smarkup().render(directives);
     expect(output).to.equal('/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!');
   });
 
@@ -74,7 +71,7 @@ describe('Smarkup renderer', () => {
         body: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.'
       }
     ];
-    const parser = new Smarkup({
+    const options = {
       symbols: {
         directive: {
           start: '🪄✨ ',
@@ -93,8 +90,8 @@ describe('Smarkup renderer', () => {
           end: '📜✨'
         }
       }
-    });
-    const output = parser.render(directives);
+    };
+    const output = smarkup(options).render(directives);
     expect(output).to.equal('🪄✨ createProject ✨🌟⭐️ name 🔮 lorem-ipsum ⭐️🌟✨\n🪄✨ writeProjectFile ✨🌟⭐️ project 🔮 lorem-ipsum ✨💫✨ file 🔮 lorem.txt ⭐️🌟✨ ✨📜\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\n📜✨ writeProjectFile ⚡️');
   });
 });
