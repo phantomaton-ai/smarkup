@@ -24,21 +24,21 @@ function smarkup(input, options = {}) {
         }
         directives.push(currentDirective);
       }
-      let directiveMatch = line.slice(finalOptions.directiveStartSymbol.length).match(
-        new RegExp(`^([^${finalOptions.argumentStartSymbol}]+)${finalOptions.argumentStartSymbol}([^${finalOptions.argumentEndSymbol}]+)${finalOptions.argumentEndSymbol}`)
-      );
-      if (directiveMatch) {
-        currentDirective = {
-          action: directiveMatch[1].trim(),
-          attributes: {},
-          body: ''
-        };
-        let args = directiveMatch[2];
-        let argPairs = args.split(finalOptions.argumentSeparatorSymbol);
-        for (let pair of argPairs) {
-          let [key, value] = pair.trim().split(finalOptions.argumentSeparatorSymbol, 2);
-          currentDirective.attributes[key] = value;
-        }
+      let actionStart = finalOptions.directiveStartSymbol.length;
+      let actionEnd = line.indexOf(finalOptions.argumentStartSymbol, actionStart);
+      let action = line.slice(actionStart, actionEnd).trim();
+      let argStart = actionEnd + 1;
+      let argEnd = line.indexOf(finalOptions.argumentEndSymbol, argStart);
+      let args = line.slice(argStart, argEnd);
+      currentDirective = {
+        action,
+        attributes: {},
+        body: ''
+      };
+      let argPairs = args.split(finalOptions.argumentSeparatorSymbol);
+      for (let pair of argPairs) {
+        let [key, value] = pair.trim().split(finalOptions.argumentSeparatorSymbol, 2);
+        currentDirective.attributes[key] = value;
       }
     } else if (line.startsWith(finalOptions.bodyEndSymbol)) {
       // End of directive body
