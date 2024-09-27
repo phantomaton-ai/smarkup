@@ -37,8 +37,12 @@ function smarkup(input, options = {}) {
       };
       let argPairs = args.split(finalOptions.argumentSeparatorSymbol);
       for (let pair of argPairs) {
-        let [key, value] = pair.trim().split(finalOptions.argumentSeparatorSymbol, 2);
-        currentDirective.attributes[key] = value;
+        let pairIndex = pair.indexOf(finalOptions.argumentSeparatorSymbol);
+        if (pairIndex !== -1) {
+          let key = pair.slice(0, pairIndex).trim();
+          let value = pair.slice(pairIndex + 1).trim();
+          currentDirective.attributes[key] = value;
+        }
       }
     } else if (line.startsWith(finalOptions.bodyEndSymbol)) {
       // End of directive body
