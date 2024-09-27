@@ -144,9 +144,9 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
     
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
 
-🪄✨ writeProjectFile  ✨🌟⭐️ project🔮 lorem-ipsum ✨💫✨ file 🔮 lorem.txt ⭐️🌟✨ 📜
+🪄✨ writeProjectFile  ✨🌟⭐️ project 🔮 lorem-ipsum ✨💫✨ file 🔮 lorem.txt ⭐️🌟✨ ✨📜
 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-📜 writeProjectFile ⚡️
+📜✨ writeProjectFile ⚡️
     `;
     const directives = smarkup(input, {
       symbols: {
@@ -163,8 +163,8 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
           separator: ' 🔮 '
         },
         body: {
-          start: '📜',
-          end: '✨'
+          start: '✨📜',
+          end: '📜✨'
         }
       }
     });
