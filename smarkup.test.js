@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import smarkup from './smarkup';
+import smarkup from './smarkup.js';
 
 describe('smarkup parser', () => {
   it('should parse a simple directive', () => {
