@@ -4,13 +4,13 @@ const DEFAULTS = {
       start: '/',
       end: '!'
     },
-    args: {
+    arguments: {
       start: '(',
       separator: ',',
-      pair: {
-        separator: ':'
-      },
       end: ')'
+    },
+    pair: {
+      separator: ':'
     },
     body: {
       start: '{',
@@ -40,23 +40,23 @@ function smarkup(input, opts = {}) {
         dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
       }
       let start = sym.directive.start.length;
-      let end = line.indexOf(sym.args.start, start);
+      let end = line.indexOf(sym.arguments.start, start);
       let action = line.slice(start, end).trim();
-      start = end + 1;
-      end = line.lastIndexOf(sym.args.end);
+      start = end + sym.arguments.start.length;
+      end = line.lastIndexOf(sym.arguments.end);
       let args = line.slice(start, end);
       curr = { action, attributes: {}, body: [] };
-      let pairs = args.split(sym.args.separator).filter(pair => pair.includes(sym.args.pair.separator));
+      let pairs = args.split(sym.arguments.separator).filter(pair => pair.includes(sym.pair.separator));
       for (let pair of pairs) {
-        let [key, value] = pair.split(sym.args.pair.separator, 2);
+        let [key, value] = pair.split(sym.pair.separator, 2);
         curr.attributes[key.trim()] = value.trim();
       }
-    } else if (line.startsWith(sym.body.start)) {
-      let bodyStart = sym.body.start.length;
-      let bodyEnd = line.lastIndexOf(sym.body.end);
-      curr.body.push(line.slice(bodyStart, bodyEnd));
-    } else if (line.startsWith(sym.body.end)) {
-      dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
+      if (!line.endsWith(sym.body.start)) {
+        dir.push({ ...curr, body: undefined });
+        curr = null;
+      }
+    } else if (curr && line.split(' ').join('') === `${sym.body.end}${curr.action}${sym.directive.end}`) {
+      dir.push({ ...curr, body: joinBody(curr.body) });
       curr = null;
     } else if (curr) {
       curr.body.push(line);

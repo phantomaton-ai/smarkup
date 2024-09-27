@@ -32,7 +32,7 @@ describe('smarkup parser', () => {
   });
 
   it('should handle multiple directives', () => {
-    const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} createProject!';
+    const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
     const directives = smarkup(input);
     expect(directives).to.deep.equal([
       {
@@ -82,7 +82,7 @@ describe('smarkup parser', () => {
       {
         action: 'createProject',
         attributes: {},
-        body: ''
+        body: undefined
       }
     ]);
   });
@@ -111,7 +111,7 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
         attributes: {
           name: 'lorem-ipsum'
         },
-        body: ''
+        body: undefined
       },
       {
         action: 'writeProjectFile',
@@ -126,7 +126,7 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
         attributes: {
           name: 'ipsum-lorem'
         },
-        body: ''
+        body: undefined
       },
       {
         action: 'writeProjectFile',
@@ -140,7 +140,7 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
   });
 
   it('should handle custom symbols', () => {
-    const input = `🪄✨ createProject ✨🌟⭐️ name 🔮 test ⭐️🌟✨
+    const input = `🪄✨ createProject ✨🌟⭐️ name 🔮 lorem-ipsum ⭐️🌟✨
     
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
 
@@ -155,11 +155,11 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
           end: '⚡️'
         },
         arguments: {
-          start: ' ✨🌟⭐️ ',
+          start: '✨🌟⭐️',
           separator: '✨💫✨',
-          end: ' ⭐️🌟✨'
+          end: '⭐️🌟✨'
         },
-        pairs: {
+        pair: {
           separator: ' 🔮 '
         },
         body: {
