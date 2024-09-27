@@ -46,7 +46,7 @@ function smarkup(input, opts = {}) {
       end = line.lastIndexOf(sym.args.end);
       let args = line.slice(start, end);
       curr = { action, attributes: {}, body: '' };
-      let pairs = args.split(sym.args.separator);
+      let pairs = args.split(sym.args.separator).filter(pair => pair.includes(sym.args.pair.separator));
       for (let pair of pairs) {
         let [key, value] = pair.split(sym.args.pair.separator, 2);
         curr.attributes[key.trim()] = value.trim();
