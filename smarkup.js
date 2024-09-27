@@ -24,14 +24,17 @@ function smarkup(input, options = {}) {
         }
         directives.push(currentDirective);
       }
-      currentDirective = {
-        action: line.slice(finalOptions.directiveStartSymbol.length).split(finalOptions.argumentStartSymbol)[0].trim(),
-        attributes: {},
-        body: ''
-      };
-      let args = line.slice(finalOptions.directiveStartSymbol.length).split(finalOptions.argumentStartSymbol)[1];
-      if (args && args.length > 0) {
-        let argPairs = args.slice(0, -1).split(finalOptions.argumentSeparatorSymbol);
+      let directiveMatch = line.slice(finalOptions.directiveStartSymbol.length).match(
+        new RegExp(`^([^${finalOptions.argumentStartSymbol}]+)${finalOptions.argumentStartSymbol}([^${finalOptions.argumentEndSymbol}]+)${finalOptions.argumentEndSymbol}`)
+      );
+      if (directiveMatch) {
+        currentDirective = {
+          action: directiveMatch[1].trim(),
+          attributes: {},
+          body: ''
+        };
+        let args = directiveMatch[2];
+        let argPairs = args.split(finalOptions.argumentSeparatorSymbol);
         for (let pair of argPairs) {
           let [key, value] = pair.trim().split(finalOptions.argumentSeparatorSymbol, 2);
           if (key && value) {
