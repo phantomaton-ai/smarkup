@@ -19,9 +19,9 @@ function smarkup(input) {
             };
             let args = line.slice(1).split('(')[1];
             if (args && args.length > 0) {
-                let argPairs = args.slice(0, -1).split(', ');
+                let argPairs = args.slice(0, -1).split(',');
                 for (let pair of argPairs) {
-                    let [key, value] = pair.split(':');
+                    let [key, value] = pair.trim().split(':', 2);
                     currentDirective.attributes[key.trim()] = value.trim();
                 }
             }
