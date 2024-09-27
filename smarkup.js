@@ -7,6 +7,9 @@ function smarkup(input) {
         if (line.startsWith('/')) {
             // Start of a new directive
             if (currentDirective) {
+                if (currentDirective.body.length > 0) {
+                    currentDirective.body = currentDirective.body.join('\n');
+                }
                 directives.push(currentDirective);
             }
             currentDirective = {
