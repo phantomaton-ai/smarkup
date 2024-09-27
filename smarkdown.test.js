@@ -1,6 +1,5 @@
-const chai = require('chai');
-const expect = chai.expect;
-const smarkup = require('./smarkup');
+import { expect } from 'chai';
+import smarkup from './smarkup';
 
 describe('smarkup parser', () => {
   it('should parse a simple directive', () => {
