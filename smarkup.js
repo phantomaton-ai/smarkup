@@ -18,7 +18,7 @@ function smarkup(input) {
                 body: ''
             };
             let args = line.slice(1).split('(')[1];
-            if (args) {
+            if (args && args.length > 0) {
                 let argPairs = args.slice(0, -1).split(', ');
                 for (let pair of argPairs) {
                     let [key, value] = pair.split(':');
