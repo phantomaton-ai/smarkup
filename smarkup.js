@@ -17,9 +17,10 @@ function smarkup(input) {
                 attributes: {},
                 body: ''
             };
-            let args = line.slice(1).split('(')[1];
-            if (args && args.length > 0) {
-                let argPairs = args.slice(0, -1).split(',');
+            let argsMatch = line.slice(1).match(/\(([^)]*)\)/);
+            if (argsMatch) {
+                let args = argsMatch[1];
+                let argPairs = args.split(',');
                 for (let pair of argPairs) {
                     let [key, value] = pair.trim().split(':', 2);
                     currentDirective.attributes[key.trim()] = value.trim();
