@@ -4,7 +4,28 @@ smarkup is a lightweight syntax for embedding directives in plain-text document 
 
 ## Syntax
 
-TODO, include examples
+The smarkup syntax uses directives, which are defined using the following format:
+
+1. **Directive with no arguments and no body**:
+   ```
+   /directiveName
+   ```
+
+2. **Directive with arguments and no body**:
+   ```
+   /directiveName(arg1:value1, arg2:value2)
+   ```
+
+3. **Directive with arguments and a body**:
+   ```
+   /directiveName(arg1:value1, arg2:value2) {
+   This is the content of the directive body.
+   } directiveName!
+   ```
+
+The directive starts with a forward slash (`/`) to mark the beginning, followed by the directive name. If the directive has arguments, they are enclosed in parentheses `()` and separated by commas. The key-value pairs for the arguments are separated by a colon (`:`).
+
+If the directive has a body, it is enclosed between curly braces `{}`, and the directive name is repeated at the end, followed by an exclamation mark (`!`) to mark the end of the directive.
 
 ## Usage
 
@@ -51,7 +72,7 @@ The `render` method takes an array of directive objects and returns the correspo
 
 ## Configuration
 
-`smarkup` accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
+The `smarkup` function accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
 
 - `directive.start`: The symbol that marks the start of a directive.
 - `directive.end`: The symbol that marks the end of a directive.
