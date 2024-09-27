@@ -1,3 +1,63 @@
+class Smarkup {
+  constructor(options = {}) {
+    this.symbols = { ...DEFAULTS.symbols, ...options.symbols };
+  }
+
+  parse(input) {
+    let dir = [];
+    let lines = input.split('\n');
+    let curr = null;
+
+    for (let line of lines) {
+      if (line.startsWith(this.symbols.directive.start)) {
+        if (curr) {
+          dir = this.pushDirective(dir, { ...curr, body: this.joinBody(curr.body) });
+        }
+        let start = this.symbols.directive.start.length;
+        let end = line.indexOf(this.symbols.arguments.start, start);
+        let action = line.slice(start, end).trim();
+        start = end + this.symbols.arguments.start.length;
+        end = line.lastIndexOf(this.symbols.arguments.end);
+        let args = line.slice(start, end);
+        curr = { action, attributes: {}, body: [] };
+        let pairs = args.split(this.symbols.arguments.separator).filter(pair => pair.includes(this.symbols.pair.separator));
+        for (let pair of pairs) {
+          let [key, value] = pair.split(this.symbols.pair.separator, 2);
+          curr.attributes[key.trim()] = value.trim();
+        }
+        if (!line.endsWith(this.symbols.body.start)) {
+          dir.push({ ...curr, body: undefined });
+          curr = null;
+        }
+      } else if (curr && line.split(' ').join('') === `${this.symbols.body.end}${curr.action}${this.symbols.directive.end}`) {
+        dir.push({ ...curr, body: this.joinBody(curr.body) });
+        curr = null;
+      } else if (curr) {
+        curr.body.push(line);
+      }
+    }
+
+    if (curr) {
+      dir = this.pushDirective(dir, { ...curr, body: this.joinBody(curr.body) });
+    }
+
+    return dir;
+  }
+
+  joinBody(body) {
+    return Array.isArray(body) ? body.join('\n') : body || '';
+  }
+
+  pushDirective(directives, directive) {
+    directives.push(directive);
+    return directives;
+  }
+
+  render(directives) {
+    // TODO: Implement the render method
+  }
+}
+
 const DEFAULTS = {
   symbols: {
     directive: {
@@ -19,55 +79,9 @@ const DEFAULTS = {
   }
 };
 
-function joinBody(body) {
-  return Array.isArray(body) ? body.join('\n') : body || '';
-}
-
-function pushDirective(directives, directive) {
-  directives.push(directive);
-  return directives;
-}
-
 function smarkup(input, opts = {}) {
-  const sym = { ...DEFAULTS.symbols, ...opts.symbols };
-  let dir = [];
-  let lines = input.split('\n');
-  let curr = null;
-
-  for (let line of lines) {
-    if (line.startsWith(sym.directive.start)) {
-      if (curr) {
-        dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
-      }
-      let start = sym.directive.start.length;
-      let end = line.indexOf(sym.arguments.start, start);
-      let action = line.slice(start, end).trim();
-      start = end + sym.arguments.start.length;
-      end = line.lastIndexOf(sym.arguments.end);
-      let args = line.slice(start, end);
-      curr = { action, attributes: {}, body: [] };
-      let pairs = args.split(sym.arguments.separator).filter(pair => pair.includes(sym.pair.separator));
-      for (let pair of pairs) {
-        let [key, value] = pair.split(sym.pair.separator, 2);
-        curr.attributes[key.trim()] = value.trim();
-      }
-      if (!line.endsWith(sym.body.start)) {
-        dir.push({ ...curr, body: undefined });
-        curr = null;
-      }
-    } else if (curr && line.split(' ').join('') === `${sym.body.end}${curr.action}${sym.directive.end}`) {
-      dir.push({ ...curr, body: joinBody(curr.body) });
-      curr = null;
-    } else if (curr) {
-      curr.body.push(line);
-    }
-  }
-
-  if (curr) {
-    dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
-  }
-
-  return dir;
+  const smarkup = new Smarkup(opts);
+  return smarkup.parse(input);
 }
 
 export default smarkup;
