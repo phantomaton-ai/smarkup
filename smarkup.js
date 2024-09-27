@@ -49,16 +49,16 @@ class Smarkup {
       let output = `${this.symbols.directive.start}${directive.action}${this.symbols.arguments.start}`;
       const args = [];
       for (let [key, value] of Object.entries(directive.attributes)) {
-        args.push(`${key}${this.symbols.pair.separator}${value}`);
+        args.push(`${key}${this.symbols.pair.separator} ${value}`);
       }
-      output += args.join(this.symbols.arguments.separator);
+      output += args.join(`, `);
       output += `${this.symbols.arguments.end}`;
       if (directive.body !== undefined) {
-        output += ` ${this.symbols.body.start}\n${directive.body}\n${this.symbols.body.end} ${directive.action}${this.symbols.directive.end}`;
+        output += ` ${this.symbols.body.start}\n${directive.body.trimStart()}\n${this.symbols.body.end} ${directive.action}${this.symbols.directive.end}`;
       } else {
         output += ``;
       }
-      return output;
+      return output.trim();
     }).join('\n');
   }
 
