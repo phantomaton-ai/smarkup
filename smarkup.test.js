@@ -11,13 +11,13 @@ describe('smarkup parser', () => {
         attributes: {
           name: 'test'
         },
-        body: ''
+        body: undefined
       }
     ]);
   });
 
   it('should parse a directive with a body', () => {
-    const input = '/writeProjectFile(project:smarkup, file:example.txt) {\nThis is the content.\n}';
+    const input = '/writeProjectFile(project:smarkup, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
     const directives = smarkup(input);
     expect(directives).to.deep.equal([
       {
@@ -32,7 +32,7 @@ describe('smarkup parser', () => {
   });
 
   it('should handle multiple directives', () => {
-    const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n}';
+    const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} createProject!';
     const directives = smarkup(input);
     expect(directives).to.deep.equal([
       {
@@ -40,7 +40,7 @@ describe('smarkup parser', () => {
         attributes: {
           name: 'test'
         },
-        body: ''
+        body: undefined
       },
       {
         action: 'writeProjectFile',
@@ -62,7 +62,7 @@ describe('smarkup parser', () => {
         attributes: {
           name: 'test'
         },
-        body: ''
+        body: undefined
       },
       {
         action: 'writeProjectFile',
@@ -70,7 +70,7 @@ describe('smarkup parser', () => {
           project: 'test',
           file: 'example.txt'
         },
-        body: ''
+        body: undefined
       }
     ]);
   });
@@ -94,7 +94,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros
 
 /writeProjectFile(project:lorem-ipsum, file:lorem.txt) {
 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-}
+} writeProjectFile!
 
 /createProject(name:ipsum-lorem)
     
@@ -102,7 +102,7 @@ Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, ad
 
 /writeProjectFile(project:ipsum-lorem, file:ipsum.txt) {
 Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-}`;
+} writeProjectFile!`;
 
     const directives = smarkup(input);
     expect(directives).to.deep.equal([
@@ -140,23 +140,30 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
   });
 
   it('should handle custom symbols', () => {
-    const input = '🪄createProject(🎀name🎑:test🥰)';
+    const input = `🪄✨ createProject ✨🌟⭐️ name 🔮 test ⭐️🌟✨
+    
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
+
+🪄✨ writeProjectFile  ✨🌟⭐️ project🔮 lorem-ipsum ✨💫✨ file 🔮 lorem.txt ⭐️🌟✨ 📜
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+📜 writeProjectFile ⚡️
+    `;
     const directives = smarkup(input, {
       symbols: {
         directive: {
-          start: '🪄',
-          end: '🥰'
+          start: '🪄✨ ',
+          end: '⚡️'
         },
-        args: {
-          start: '🎀',
-          separator: '🎑',
-          pair: {
-            separator: '🎑'
-          },
-          end: '🥰'
+        arguments: {
+          start: ' ✨🌟⭐️ ',
+          separator: '✨💫✨',
+          end: ' ⭐️🌟✨'
+        },
+        pairs: {
+          separator: ' 🔮 '
         },
         body: {
-          start: '🌟',
+          start: '📜',
           end: '✨'
         }
       }
@@ -165,9 +172,17 @@ Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
       {
         action: 'createProject',
         attributes: {
-          name: 'test'
+          name: 'lorem-ipsum'
         },
-        body: ''
+        body: undefined
+      },
+      {
+        action: 'writeProjectFile',
+        attributes: {
+          project: 'lorem-ipsum',
+          file: 'lorem.txt'
+        },
+        body: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.'
       }
     ]);
   });
