@@ -1,74 +1,72 @@
-const DEFAULT_OPTIONS = {
-  directiveStartSymbol: '/',
-  argumentStartSymbol: '(',
-  argumentSeparatorSymbol: ',',
-  pairSeparatorSymbol: ':',
-  argumentEndSymbol: ')',
-  bodyStartSymbol: '{',
-  bodyEndSymbol: '}',
-  commentSymbol: '!'
+const DEFAULTS = {
+  symbols: {
+    directive: {
+      start: '/',
+      args: {
+        start: '(',
+        separator: ',',
+        pair: {
+          separator: ':',
+          end: ')'
+        }
+      }
+    },
+    body: {
+      start: '{',
+      end: '}'
+    },
+    comment: '!'
+  }
 };
 
-function smarkup(input, options = {}) {
-  const finalOptions = { ...DEFAULT_OPTIONS, ...options };
+function joinBody(body) {
+  return Array.isArray(body) ? body.join('\n') : body;
+}
 
-  let directives = [];
+function pushDirective(directives, directive) {
+  directives.push(directive);
+  return directives;
+}
+
+function smarkup(input, opts = {}) {
+  const { symbols } = { ...DEFAULTS, ...opts };
+  let dir = [];
   let lines = input.split('\n');
-  let currentDirective = null;
+  let curr = null;
 
   for (let line of lines) {
-    if (line.startsWith(finalOptions.directiveStartSymbol)) {
-      // Start of a new directive
-      if (currentDirective) {
-        if (Array.isArray(currentDirective.body)) {
-          currentDirective.body = currentDirective.body.join('\n');
+    if (line.startsWith(symbols.directive.start)) {
+      if (curr) {
+        dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
+      }
+      let [action, args] = line
+        .slice(symbols.directive.start.length)
+        .split(symbols.directive.args.start);
+      curr = { action: action.trim(), attributes: {}, body: '' };
+      if (args) {
+        args = args.slice(0, -1).split(symbols.directive.args.separator);
+        for (let pair of args) {
+          let [key, value] = pair.split(symbols.directive.args.pair.separator, 2);
+          curr.attributes[key.trim()] = value.trim();
         }
-        directives.push(currentDirective);
       }
-      let actionStart = finalOptions.directiveStartSymbol.length;
-      let actionEnd = line.indexOf(finalOptions.argumentStartSymbol, actionStart);
-      let action = line.slice(actionStart, actionEnd).trim();
-      let argStart = actionEnd + 1;
-      let argEnd = line.indexOf(finalOptions.argumentEndSymbol, argStart);
-      let args = line.slice(argStart, argEnd);
-      currentDirective = {
-        action,
-        attributes: {},
-        body: ''
-      };
-      let argPairs = args.split(finalOptions.argumentSeparatorSymbol)
-        .filter(pair => pair.indexOf(finalOptions.pairSeparatorSymbol) > 0);
-      for (let pair of argPairs) {
-        let pairIndex = pair.indexOf(finalOptions.pairSeparatorSymbol);
-        let key = pair.slice(0, pairIndex).trim();
-        let value = pair.slice(pairIndex + 1).trim();
-        currentDirective.attributes[key] = value;
-      }
-    } else if (line.startsWith(finalOptions.bodyEndSymbol)) {
-      // End of directive body
-      if (Array.isArray(currentDirective.body)) {
-        currentDirective.body = currentDirective.body.join('\n');
-      }
-      directives.push(currentDirective);
-      currentDirective = null;
-    } else if (currentDirective) {
-      // Add line to current directive body
-      if (Array.isArray(currentDirective.body)) {
-        currentDirective.body.push(line);
+    } else if (line.startsWith(symbols.body.end)) {
+      dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
+      curr = null;
+    } else if (curr) {
+      if (Array.isArray(curr.body)) {
+        curr.body.push(line);
       } else {
-        currentDirective.body = line;
+        curr.body = line;
       }
     }
   }
 
-  if (currentDirective) {
-    if (Array.isArray(currentDirective.body)) {
-      currentDirective.body = currentDirective.body.join('\n');
-    }
-    directives.push(currentDirective);
+  if (curr) {
+    dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
   }
 
-  return directives;
+  return dir;
 }
 
 export default smarkup;
