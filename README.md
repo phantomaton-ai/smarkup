@@ -1,6 +1,6 @@
 # smarkup
 
-The `smarkup` parser is a simple markup language for defining project-related directives, such as creating projects, writing files, and more. It is designed to be extensible and configurable, allowing users to define their own custom symbols and syntax.
+The `smarkup` parser is a simple markup language for defining custom directives. It is designed to be extensible and configurable, allowing users to define their own custom symbols and syntax.
 
 ## Usage
 
@@ -10,9 +10,9 @@ To use the `smarkup` parser, import the `smarkup` function and pass in the input
 import smarkup from './smarkup';
 
 const input = `
-/createProject(name:my-project)
-/writeProjectFile(project:my-project, file:example.txt) {
-This is the content of the file.
+/createDirective(name:my-directive, param:value)
+/performAction(arg1:foo, arg2:bar) {
+This is the content of the directive.
 }
 `;
 
@@ -22,7 +22,7 @@ console.log(directives);
 
 The `smarkup` function will return an array of directive objects, each with the following properties:
 
-- `action`: The name of the directive (e.g., `'createProject'`, `'writeProjectFile'`).
+- `action`: The name of the directive (e.g., `'createDirective'`, `'performAction'`).
 - `attributes`: An object containing the key-value pairs of the directive arguments.
 - `body`: The content of the directive body, if any. This will be an array of strings, one for each line of the body.
 
@@ -43,10 +43,10 @@ Here's an example of how to use custom symbols:
 
 ```javascript
 const input = `
-🪄✨ createProject ✨🌟⭐️ name 🔮 my-project ⭐️🌟✨
-🪄✨ writeProjectFile  ✨🌟⭐️ project 🔮 my-project ✨💫✨ file 🔮 example.txt ⭐️🌟✨ ✨📜
-This is the content of the file.
-📜✨ writeProjectFile ⚡️
+🪄✨ createDirective ✨🌟⭐️ name 🔮 my-directive ✨💫✨ param 🔮 value ⭐️🌟✨
+🪄✨ performAction ✨🌟⭐️ arg1 🔮 foo ✨💫✨ arg2 🔮 bar ⭐️🌟✨ ✨📜
+This is the content of the directive.
+📜✨ performAction ⚡️
 `;
 
 const directives = smarkup(input, {
@@ -75,7 +75,7 @@ In this example, the `smarkup` parser will use the specified custom symbols to p
 
 ## Limitations
 
-- The `smarkup` parser does not currently support comments or other advanced features. It is designed for a specific use case of defining project-related directives.
+- The `smarkup` parser does not currently support comments or other advanced features.
 - The parser is case-sensitive, so the directive names and argument keys must match exactly.
 - The parser does not perform any validation or error-checking on the input string. It is the responsibility of the user to ensure that the input is correctly formatted.
 
