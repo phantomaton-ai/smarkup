@@ -11,7 +11,7 @@ class Smarkup {
     for (let line of lines) {
       if (line.startsWith(this.symbols.directive.start)) {
         if (curr) {
-          dir = this.pushDirective(dir, { ...curr, body: this.joinBody(curr.body) });
+          dir = this.pushDirective(dir, { ...curr, body: curr.body.join('\n') });
         }
         let start = this.symbols.directive.start.length;
         let end = line.indexOf(this.symbols.arguments.start, start);
@@ -30,7 +30,7 @@ class Smarkup {
           curr = null;
         }
       } else if (curr && line.split(' ').join('') === `${this.symbols.body.end}${curr.action}${this.symbols.directive.end}`) {
-        dir.push({ ...curr, body: this.joinBody(curr.body) });
+        dir.push({ ...curr, body: curr.body.join('\n') });
         curr = null;
       } else if (curr) {
         curr.body.push(line);
@@ -38,19 +38,10 @@ class Smarkup {
     }
 
     if (curr) {
-      dir = this.pushDirective(dir, { ...curr, body: this.joinBody(curr.body) });
+      dir.push({ ...curr, body: curr.body.join('\n') });
     }
 
     return dir;
-  }
-
-  joinBody(body) {
-    return Array.isArray(body) ? body.join('\n') : body || '';
-  }
-
-  pushDirective(directives, directive) {
-    directives.push(directive);
-    return directives;
   }
 
   render(directives) {
