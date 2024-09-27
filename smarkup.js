@@ -7,12 +7,15 @@ function smarkup(input) {
         if (line.startsWith('/')) {
             // Start of a new directive
             if (currentDirective) {
+                if (Array.isArray(currentDirective.body)) {
+                    currentDirective.body = currentDirective.body.join('\n');
+                }
                 directives.push(currentDirective);
             }
             currentDirective = {
                 action: line.slice(1).split('(')[0],
                 attributes: {},
-                body: []
+                body: ''
             };
             let args = line.slice(1).split('(')[1];
             if (args) {
@@ -24,17 +27,25 @@ function smarkup(input) {
             }
         } else if (line.startsWith('}')) {
             // End of directive body
-            currentDirective.body = currentDirective.body.join('\n');
+            if (Array.isArray(currentDirective.body)) {
+                currentDirective.body = currentDirective.body.join('\n');
+            }
             directives.push(currentDirective);
             currentDirective = null;
         } else if (currentDirective) {
             // Add line to current directive body
-            currentDirective.body.push(line);
+            if (Array.isArray(currentDirective.body)) {
+                currentDirective.body.push(line);
+            } else {
+                currentDirective.body = line;
+            }
         }
     }
 
     if (currentDirective) {
-        currentDirective.body = currentDirective.body.join('\n');
+        if (Array.isArray(currentDirective.body)) {
+            currentDirective.body = currentDirective.body.join('\n');
+        }
         directives.push(currentDirective);
     }
 
