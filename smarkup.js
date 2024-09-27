@@ -1,4 +1,4 @@
-function parseDirectives(input) {
+function smarkup(input) {
     let directives = [];
     let lines = input.split('\n');
     let currentDirective = null;
@@ -40,6 +40,4 @@ function parseDirectives(input) {
     return directives;
 }
 
-module.exports = {
-    parseDirectives
-};
+export default smarkup;
