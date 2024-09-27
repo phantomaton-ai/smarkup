@@ -11,13 +11,13 @@ class Smarkup {
     for (let line of lines) {
       if (!curr && line.startsWith(this.symbols.directive.start)) {
         let start = this.symbols.directive.start.length;
-        let end = line.indexOf(this.symbols.arguments.start, start);
+        let end = line.indexOf(this.symbols.attributes.start, start);
         let action = line.slice(start, end).trim();
-        start = end + this.symbols.arguments.start.length;
-        end = line.lastIndexOf(this.symbols.arguments.end);
+        start = end + this.symbols.attributes.start.length;
+        end = line.lastIndexOf(this.symbols.attributes.end);
         let args = line.slice(start, end);
         curr = { action, attributes: {}, body: [] };
-        let pairs = args.split(this.symbols.arguments.separator).filter(pair => pair.includes(this.symbols.pair.separator));
+        let pairs = args.split(this.symbols.attributes.separator).filter(pair => pair.includes(this.symbols.pair.separator));
         for (let pair of pairs) {
           let [key, value] = pair.split(this.symbols.pair.separator, 2);
           curr.attributes[key.trim()] = value.trim();
@@ -43,13 +43,13 @@ class Smarkup {
 
   render(directives) {
     return directives.map(directive => {
-      let output = `${this.symbols.directive.start}${directive.action}${this.symbols.arguments.start}`;
+      let output = `${this.symbols.directive.start}${directive.action}${this.symbols.attributes.start}`;
       const args = [];
       for (let [key, value] of Object.entries(directive.attributes)) {
         args.push(`${key}${this.symbols.pair.separator}${value}`);
       }
-      output += args.join(this.symbols.arguments.separator);
-      output += `${this.symbols.arguments.end}`;
+      output += args.join(this.symbols.attributes.separator);
+      output += `${this.symbols.attributes.end}`;
       if (directive.body !== undefined) {
         output += ` ${this.symbols.body.start}\n${directive.body.trimStart()}\n${this.symbols.body.end} ${directive.action}${this.symbols.directive.end}`;
       } else {
@@ -66,7 +66,7 @@ const DEFAULTS = {
       start: '/',
       end: '!'
     },
-    arguments: {
+    attributes: {
       start: '(',
       separator: ',',
       end: ')'

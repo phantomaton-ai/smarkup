@@ -50,7 +50,7 @@ describe('Smarkup', () => {
             start: '🪄✨ ',
             end: '⚡️'
           },
-          arguments: {
+          attributes: {
             start: '✨🌟⭐️',
             separator: '✨💫✨',
             end: '⭐️🌟✨'
@@ -143,7 +143,7 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
             start: '🪄✨ ',
             end: '⚡️'
           },
-          arguments: {
+          attributes: {
             start: '✨🌟⭐️',
             separator: '✨💫✨',
             end: '⭐️🌟✨'

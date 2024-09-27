@@ -77,7 +77,7 @@ describe('Smarkup renderer', () => {
           start: '🪄✨ ',
           end: '⚡️'
         },
-        arguments: {
+        attributes: {
           start: '✨🌟⭐️',
           separator: '✨💫✨',
           end: '⭐️🌟✨'

@@ -6,24 +6,24 @@ smarkup is a lightweight syntax for embedding directives in plain-text document 
 
 The smarkup syntax uses directives, which are defined using the following format:
 
-1. **Directive with no arguments and no body**:
-   ```
-   /directiveName
-   ```
+**Directive with no arguments and no body**:
+```
+/directiveName()
+```
 
-2. **Directive with arguments and no body**:
-   ```
-   /directiveName(arg1:value1, arg2:value2)
-   ```
+**Directive with arguments and no body**:
+```
+/directiveName(attr1:value1, attr2:value2)
+```
 
-3. **Directive with arguments and a body**:
-   ```
-   /directiveName(arg1:value1, arg2:value2) {
-   This is the content of the directive body.
-   } directiveName!
-   ```
+**Directive with arguments and a body**:
+```
+/directiveName(attr1:value1, attr2:value2) {
+This is the content of the directive body.
+} directiveName!
+```
 
-The directive starts with a forward slash (`/`) to mark the beginning, followed by the directive name. If the directive has arguments, they are enclosed in parentheses `()` and separated by commas. The key-value pairs for the arguments are separated by a colon (`:`).
+The directive starts with a forward slash (`/`) to mark the beginning, followed by the directive name. If the directive has attributes, they are enclosed in parentheses `()` and separated by commas. The key-value pairs for the attributes are separated by a colon (`:`).
 
 If the directive has a body, it is enclosed between curly braces `{}`, and the directive name is repeated at the end, followed by an exclamation mark (`!`) to mark the end of the directive.
 
@@ -76,10 +76,10 @@ The `smarkup` function accepts an optional `options` object, which allows you to
 
 - `directive.start`: The symbol that marks the start of a directive.
 - `directive.end`: The symbol that marks the end of a directive.
-- `arguments.start`: The symbol that marks the start of the directive arguments.
-- `arguments.separator`: The symbol that separates individual arguments.
+- `attributes.start`: The symbol that marks the start of the directive arguments.
+- `attributes.separator`: The symbol that separates individual arguments.
 - `pair.separator`: The symbol that separates the key and value within an argument.
-- `arguments.end`: The symbol that marks the end of the directive arguments.
+- `attributes.end`: The symbol that marks the end of the directive arguments.
 - `body.start`: The symbol that marks the start of the directive body.
 - `body.end`: The symbol that marks the end of the directive body.
 
