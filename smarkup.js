@@ -1,5 +1,5 @@
 const DEFAULT_OPTIONS = {
-  directiveStartSymbol: '//',
+  directiveStartSymbol: '/',
   argumentStartSymbol: '(',
   argumentSeparatorSymbol: ':',
   argumentEndSymbol: ')',
