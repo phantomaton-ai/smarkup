@@ -23,7 +23,9 @@ function smarkup(input) {
                 let argPairs = args.split(',');
                 for (let pair of argPairs) {
                     let [key, value] = pair.trim().split(':', 2);
-                    currentDirective.attributes[key.trim()] = value.trim();
+                    if (key && value) {
+                        currentDirective.attributes[key.trim()] = value.trim();
+                    }
                 }
             }
         } else if (line.startsWith('}')) {
