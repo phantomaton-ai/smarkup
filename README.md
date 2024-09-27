@@ -1,23 +1,17 @@
 # smarkup
 
-smarkup is a lightweight markup language designed for simple, human-readable text formatting. It provides a set of easy-to-use syntax rules for creating formatted documents, presentations, and other content.
+smarkup is a lightweight syntax for embedding directives in plain-text document formats, such as Markdown. It is primarily intended to be used to provide custom behaviors to LLM assistants, but may be generally useful for parsing and rendering documents including directives in that form.
 
-## Features
+## Syntax
 
-- **Headings**: Define headings of different levels using `#` symbols.
-- **Paragraphs**: Write regular text without any special syntax.
-- **Lists**: Create ordered and unordered lists using `1.`, `2.`, `*`, or `-`.
-- **Emphasis**: Use `*asterisks*` or `_underscores_` for italic text, and `**double asterisks**` or `__double underscores__` for bold text.
-- **Links**: Enclose URLs in angle brackets: `<https://example.com>`.
-- **Images**: Include images using the syntax `![alt text](image.jpg)`.
-- **Code blocks**: Surround code with triple backticks: \`\`\`code goes here\`\`\`.
+TODO, include examples
 
 ## Usage
 
 To use smarkup, you can use the `smarkup` function to parse and render the markup:
 
 ```javascript
-import smarkup, { Smarkup } from './smarkup';
+import smarkup from 'smarkup';
 
 // Parse smarkup input
 const input = `/createProject(name:test)
@@ -25,8 +19,7 @@ const input = `/createProject(name:test)
 This is the content.
 } writeProjectFile!`;
 
-const parser = new Smarkup();
-const directives = parser.parse(input);
+const directives = smarkup().parse(input);
 console.log(directives);
 // Output:
 // [
@@ -39,7 +32,7 @@ console.log(directives);
 // ]
 
 // Render directives back to smarkup
-const output = parser.render(directives);
+const output = smarkup().render(directives);
 console.log(output);
 // Output:
 // /createProject(name:test)
@@ -58,7 +51,7 @@ The `render` method takes an array of directive objects and returns the correspo
 
 ## Configuration
 
-The `Smarkup` constructor accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
+`smarkup` accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
 
 - `directive.start`: The symbol that marks the start of a directive.
 - `directive.end`: The symbol that marks the end of a directive.
@@ -72,7 +65,7 @@ The `Smarkup` constructor accepts an optional `options` object, which allows you
 Here's an example of how to use custom symbols:
 
 ```javascript
-const parser = new Smarkup({
+const instance = smarkup({
   symbols: {
     directive: {
       start: '🪄✨ ',
