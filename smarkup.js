@@ -2,20 +2,20 @@ const DEFAULTS = {
   symbols: {
     directive: {
       start: '/',
-      args: {
-        start: '(',
-        separator: ',',
-        pair: {
-          separator: ':',
-          end: ')'
-        }
-      }
+      end: '!'
+    },
+    args: {
+      start: '(',
+      separator: ',',
+      pair: {
+        separator: ':'
+      },
+      end: ')'
     },
     body: {
       start: '{',
       end: '}'
-    },
-    comment: '!'
+    }
   }
 };
 
@@ -29,28 +29,29 @@ function pushDirective(directives, directive) {
 }
 
 function smarkup(input, opts = {}) {
-  const { symbols } = { ...DEFAULTS, ...opts };
+  const sym = { ...DEFAULTS.symbols, ...opts.symbols };
   let dir = [];
   let lines = input.split('\n');
   let curr = null;
 
   for (let line of lines) {
-    if (line.startsWith(symbols.directive.start)) {
+    if (line.startsWith(sym.directive.start)) {
       if (curr) {
         dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
       }
-      let [action, args] = line
-        .slice(symbols.directive.start.length)
-        .split(symbols.directive.args.start);
-      curr = { action: action.trim(), attributes: {}, body: '' };
-      if (args) {
-        args = args.slice(0, -1).split(symbols.directive.args.separator);
-        for (let pair of args) {
-          let [key, value] = pair.split(symbols.directive.args.pair.separator, 2);
-          curr.attributes[key.trim()] = value.trim();
-        }
+      let start = sym.directive.start.length;
+      let end = line.indexOf(sym.args.start, start);
+      let action = line.slice(start, end).trim();
+      start = end + 1;
+      end = line.lastIndexOf(sym.args.end);
+      let args = line.slice(start, end);
+      curr = { action, attributes: {}, body: '' };
+      let pairs = args.split(sym.args.separator);
+      for (let pair of pairs) {
+        let [key, value] = pair.split(sym.args.pair.separator, 2);
+        curr.attributes[key.trim()] = value.trim();
       }
-    } else if (line.startsWith(symbols.body.end)) {
+    } else if (line.startsWith(sym.body.end)) {
       dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
       curr = null;
     } else if (curr) {
