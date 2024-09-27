@@ -53,7 +53,7 @@ function smarkup(input, opts = {}) {
       }
     } else if (line.startsWith(sym.body.start)) {
       let bodyStart = sym.body.start.length;
-      let bodyEnd = line.indexOf(sym.body.end, bodyStart);
+      let bodyEnd = line.lastIndexOf(sym.body.end);
       curr.body.push(line.slice(bodyStart, bodyEnd));
     } else if (line.startsWith(sym.body.end)) {
       dir = pushDirective(dir, { ...curr, body: joinBody(curr.body) });
