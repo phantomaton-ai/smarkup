@@ -37,9 +37,7 @@ function smarkup(input, options = {}) {
         let argPairs = args.split(finalOptions.argumentSeparatorSymbol);
         for (let pair of argPairs) {
           let [key, value] = pair.trim().split(finalOptions.argumentSeparatorSymbol, 2);
-          if (key && value) {
-            currentDirective.attributes[key.trim()] = value.trim();
-          }
+          currentDirective.attributes[key] = value;
         }
       }
     } else if (line.startsWith(finalOptions.bodyEndSymbol)) {
