@@ -1,63 +1,20 @@
 import { expect } from 'chai';
 import symbols from './smarkup.symbols.js';
+import { defaults, customs } from './smarkup.symbols.fixtures.js';
 
-describe('Smarkup Symbols', () => {
-  it('should use default symbols', () => {
-    const symbolConfig = symbols();
-    expect(symbolConfig.directive.start).to.equal('/');
-    expect(symbolConfig.directive.end).to.equal('!');
-    expect(symbolConfig.attributes.start).to.equal('(');
-    expect(symbolConfig.attributes.separator).to.equal(',');
-    expect(symbolConfig.attributes.end).to.equal(')');
-    expect(symbolConfig.pair.separator).to.equal(':');
-    expect(symbolConfig.body.start).to.equal('{');
-    expect(symbolConfig.body.end).to.equal('}');
-  });
 
-  it('should override default symbols', () => {
-    const options = {
-      directive: {
-        start: '🪄✨ ',
-        end: '⚡️'
-      },
-      attributes: {
-        start: '✨🌟⭐️',
-        separator: '✨💫✨',
-        end: '⭐️🌟✨'
-      },
-      pair: {
-        separator: ' 🔮 '
-      },
-      body: {
-        start: '✨📜',
-        end: '📜✨'
-      }
-    };
-    const symbolConfig = symbols(options);
-    expect(symbolConfig.directive.start).to.equal('🪄✨ ');
-    expect(symbolConfig.directive.end).to.equal('⚡️');
-    expect(symbolConfig.attributes.start).to.equal('✨🌟⭐️');
-    expect(symbolConfig.attributes.separator).to.equal('✨💫✨');
-    expect(symbolConfig.attributes.end).to.equal('⭐️🌟✨');
-    expect(symbolConfig.pair.separator).to.equal(' 🔮 ');
-    expect(symbolConfig.body.start).to.equal('✨📜');
-    expect(symbolConfig.body.end).to.equal('📜✨');
-  });
+const like = (options, expected) => () => {
+  expect(symbols(options)).to.deep.equal(expected);
+};
 
-  it('should use default for missing options', () => {
-    const options = {
-      directive: {
-        start: '🪄✨ '
-      }
-    };
-    const symbolConfig = symbols(options);
-    expect(symbolConfig.directive.start).to.equal('🪄✨ ');
-    expect(symbolConfig.directive.end).to.equal('!');
-    expect(symbolConfig.attributes.start).to.equal('(');
-    expect(symbolConfig.attributes.separator).to.equal(',');
-    expect(symbolConfig.attributes.end).to.equal(')');
-    expect(symbolConfig.pair.separator).to.equal(':');
-    expect(symbolConfig.body.start).to.equal('{');
-    expect(symbolConfig.body.end).to.equal('}');
-  });
+describe('smarkup.symbols', () => {
+  it('provides default symbols', like(undefined, defaults));
+  it('provides custom symbols', like(customs, customs));
+  it('provides default symbols amid partial custom options', like(
+    { directive: { start: customs.directive.start } },
+    { ...defaults, directive: {
+      start: customs.directive.start,
+      end: defaults.directive.end
+    } }
+  ));
 });
