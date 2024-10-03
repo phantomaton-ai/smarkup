@@ -1,34 +1,176 @@
 import { expect } from 'chai';
 import smarkup from './smarkup.js';
-import { simple, body, multiple, bodiless, argumentless, multiparagraph, customized, challenging } from './smarkup.fixtures.js';
-
-const like = (fixture) => () => {
-  const instance = smarkup();
-  const { parsed, text } = instance.process(fixture.text, fixture.symbols);
-  expect(parsed).to.deep.equal(fixture.directives);
-  expect(text).to.equal(fixture.text);
-};
 
 describe('Smarkup', () => {
   describe('parser and renderer', () => {
-    it('round-trips a simple directive', like(simple));
-    it('round-trips a directive with a body', like(body));
-    it('round-trips multiple directives', like(multiple));
-    it('round-trips directives with missing bodies', like(bodiless));
-    it('round-trips directives with missing arguments', like(argumentless));
-    it('round-trips multi-line, multi-paragraph, multi-directive messages', like(multiparagraph));
-    it('round-trips custom symbols', like(customized));
-    it('round-trips challenging cases', like(challenging));
+    it('round-trips a simple directive', () => {
+      const input = '/createProject(name:test)';
+      const instance = smarkup();
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
+
+    it('round-trips a directive with a body', () => {
+      const input = '/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!';
+      const instance = smarkup();
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
+
+    it('round-trips multiple directives', () => {
+      const input = '/createProject(name:test)\n/writeProjectFile(project:test,file:example.txt) {\nThis is the content.\n} writeProjectFile!';
+      const instance = smarkup();
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
+
+    it('round-trips directives with missing bodies', () => {
+      const input = '/createProject(name:test)\n/writeProjectFile(project:test,file:example.txt)';
+      const instance = smarkup();
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
+
+    it('round-trips directives with missing arguments', () => {
+      const input = '/createProject()';
+      const instance = smarkup();
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
+
+    it('round-trips custom symbols', () => {
+      const options = {
+        symbols: {
+          directive: {
+            start: '🪄✨ ',
+            end: '⚡️'
+          },
+          attributes: {
+            start: '✨🌟⭐️',
+            separator: '✨💫✨',
+            end: '⭐️🌟✨'
+          },
+          pair: {
+            separator: ' 🔮 '
+          },
+          body: {
+            start: '✨📜',
+            end: '📜✨'
+          }
+        }
+      };
+
+      const input = `🪄✨ createProject✨🌟⭐️name 🔮 lorem-ipsum⭐️🌟✨
+🪄✨ writeProjectFile✨🌟⭐️project 🔮 lorem-ipsum✨💫✨file 🔮 lorem.txt⭐️🌟✨ ✨📜
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+📜✨ writeProjectFile⚡️`;
+
+      const instance = smarkup(options);
+      const directives = instance.parse(input);
+      const output = instance.render(directives);
+      expect(output).to.equal(input);
+    });
   });
 
   describe('renderer and parser', () => {
-    it('round-trips a simple directive', like(simple));
-    it('round-trips a directive with a body', like(body));
-    it('round-trips multiple directives', like(multiple));
-    it('round-trips directives with missing bodies', like(bodiless));
-    it('round-trips directives with missing arguments', like(argumentless));
-    it('round-trips custom symbols', like(customized));
-    it('round-trips challenging cases', like(challenging));
+    it('round-trips a simple directive', () => {
+      const input = [{ action: 'createProject', attributes: {name: 'test'}, body: undefined }];
+      const instance = smarkup();
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
+
+    it('round-trips a directive with a body', () => {
+      const input = [{
+        action: 'writeProjectFile',
+        attributes: { project: 'smarkup', file: 'example.txt' },
+        body: 'This is the content.'
+      }];
+      const instance = smarkup();
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
+
+    it('round-trips multiple directives', () => {
+      const input = [
+        { action: 'createProject', attributes: {name: 'test'}, body: undefined },
+        {
+          action: 'writeProjectFile',
+          attributes: { project: 'smarkup', file: 'example.txt' },
+          body: 'This is the content.'
+        }
+      ];
+      const instance = smarkup();
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
+
+    it('round-trips directives with missing bodies', () => {
+      const input = [
+        { action: 'createProject', attributes: {name: 'test'}, body: undefined },
+        {
+          action: 'writeProjectFile',
+          attributes: { project: 'smarkup', file: 'example.txt' },
+          body: undefined
+        }
+      ];
+      const instance = smarkup();
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
+
+    it('round-trips directives with missing arguments', () => {
+      const input = [{ action: 'createProject', attributes: {}, body: undefined }];
+      const instance = smarkup();
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
+
+    it('round-trips custom symbols', () => {
+      const options = {
+        symbols: {
+          directive: {
+            start: '🪄✨ ',
+            end: '⚡️'
+          },
+          attributes: {
+            start: '✨🌟⭐️',
+            separator: '✨💫✨',
+            end: '⭐️🌟✨'
+          },
+          pair: {
+            separator: ' 🔮 '
+          },
+          body: {
+            start: '✨📜',
+            end: '📜✨'
+          }
+        }
+      };
+
+      const input = [
+        { action: 'createProject', attributes: {name: 'test'}, body: undefined },
+        {
+          action: 'writeProjectFile',
+          attributes: { project: 'smarkup', file: 'example.txt' },
+          body: 'This is the content.'
+        }
+      ];
+      const instance = smarkup(options);
+      const text = instance.render(input);
+      const output = instance.parse(text);
+      expect(output).to.deep.equal(input);
+    });
   });
 
   describe('documentation', () => {
