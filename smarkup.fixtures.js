@@ -20,3 +20,24 @@ export const body = fixture(
   }]
 );
 
+export const multiple = fixture(
+  '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!',
+  [
+    {
+      action: 'createProject',
+      attributes: {
+        name: 'test'
+      },
+      body: undefined
+    },
+    {
+      action: 'writeProjectFile',
+      attributes: {
+        project: 'test',
+        file: 'example.txt'
+      },
+      body: 'This is the content.'
+    }
+  ]
+);
+
