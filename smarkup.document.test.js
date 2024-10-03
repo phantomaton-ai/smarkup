@@ -1,19 +1,20 @@
 import { expect } from 'chai';
-import Smarkup from './smarkup.js';
+import { document } from './smarkup.document.js';
+import { symbols } from './smarkup.symbols.js';
 
 describe('Smarkup Documentation', () => {
   it('generates documentation with default symbols', () => {
-    const instance = new Smarkup();
-    const doc = instance.document();
+    const symbolConfig = symbols();
+    const doc = document(symbolConfig);
     expect(doc).to.be.a('string');
-    expect(doc).to.contain(instance.symbols().directive.start);
-    expect(doc).to.contain(instance.symbols().directive.end);
-    expect(doc).to.contain(instance.symbols().attributes.start);
-    expect(doc).to.contain(instance.symbols().attributes.separator);
-    expect(doc).to.contain(instance.symbols().attributes.end);
-    expect(doc).to.contain(instance.symbols().pair.separator);
-    expect(doc).to.contain(instance.symbols().body.start);
-    expect(doc).to.contain(instance.symbols().body.end);
+    expect(doc).to.contain(symbolConfig.directive.start);
+    expect(doc).to.contain(symbolConfig.directive.end);
+    expect(doc).to.contain(symbolConfig.attributes.start);
+    expect(doc).to.contain(symbolConfig.attributes.separator);
+    expect(doc).to.contain(symbolConfig.attributes.end);
+    expect(doc).to.contain(symbolConfig.pair.separator);
+    expect(doc).to.contain(symbolConfig.body.start);
+    expect(doc).to.contain(symbolConfig.body.end);
     expect(doc).to.match(/Directive with no arguments and no body/);
     expect(doc).to.match(/Directive with arguments and no body/);
     expect(doc).to.match(/Directive with arguments and a body/);
@@ -40,8 +41,8 @@ describe('Smarkup Documentation', () => {
         }
       }
     };
-    const instance = new Smarkup(options);
-    const doc = instance.document();
+    const symbolConfig = symbols(options.symbols);
+    const doc = document(symbolConfig);
     expect(doc).to.be.a('string');
     expect(doc).to.contain(options.symbols.directive.start);
     expect(doc).to.contain(options.symbols.directive.end);
