@@ -1,36 +1,16 @@
 import { expect } from 'chai';
 import parse from './smarkup.parse.js';
 import { customs, defaults } from './smarkup.symbols.fixtures.js';
+import { simple, body } from './smarkup.fixtures.js';
+
+const like = ({ text, directives, symbols }) => () => {
+  expect(parse(text, symbols)).to.deep.equal(directives);
+};
 
 describe('smarkup.parse', () => {
-    it('should parse a simple directive', () => {
-    const input = '/createProject(name:test)';
-    const directives = parse(input, defaults);
-    expect(directives).to.deep.equal([
-      {
-        action: 'createProject',
-        attributes: {
-          name: 'test'
-        },
-        body: undefined
-      }
-    ]);
-  });
+  it('should parse a simple directive', like(simple));
 
-  it('should parse a directive with a body', () => {
-    const input = '/writeProjectFile(project:smarkup, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
-    const directives = parse(input, defaults);
-    expect(directives).to.deep.equal([
-      {
-        action: 'writeProjectFile',
-        attributes: {
-          project: 'smarkup',
-          file: 'example.txt'
-        },
-        body: 'This is the content.'
-      }
-    ]);
-  });
+  it('should parse a directive with a body', like(body));
 
   it('should handle multiple directives', () => {
     const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
