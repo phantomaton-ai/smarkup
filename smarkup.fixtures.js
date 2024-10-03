@@ -20,7 +20,7 @@ export const body = fixture(
   }]
 );
 
-export const multipleDirectives = fixture(
+export const multiple = fixture(
   '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!',
   [
     {
@@ -41,7 +41,28 @@ export const multipleDirectives = fixture(
   ]
 );
 
-export const multilineMultiParagraph = fixture(
+export const bodiless = fixture(
+  '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt)',
+  [
+    {
+      action: 'createProject',
+      attributes: {
+        name: 'test'
+      },
+      body: undefined
+    },
+    {
+      action: 'writeProjectFile',
+      attributes: {
+        project: 'test',
+        file: 'example.txt'
+      },
+      body: undefined
+    }
+  ]
+);
+
+export const multilineMultiparagraph = fixture(
   `/createProject(name:lorem-ipsum)
     
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
