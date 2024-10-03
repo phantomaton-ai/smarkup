@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import parse from './smarkup.parse.js';
-import symbols from './smarkup.symbols.js';
+import { customs, defaults } from './smarkup.symbols.fixtures.js';
 
-describe('smarkup parser', () => {
+describe('smarkup.parse', () => {
     it('should parse a simple directive', () => {
     const input = '/createProject(name:test)';
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
@@ -19,7 +19,7 @@ describe('smarkup parser', () => {
 
   it('should parse a directive with a body', () => {
     const input = '/writeProjectFile(project:smarkup, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'writeProjectFile',
@@ -34,7 +34,7 @@ describe('smarkup parser', () => {
 
   it('should handle multiple directives', () => {
     const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
@@ -56,7 +56,7 @@ describe('smarkup parser', () => {
 
   it('should handle directives with missing bodies', () => {
     const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt)';
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
@@ -78,7 +78,7 @@ describe('smarkup parser', () => {
 
   it('should handle directives with missing arguments', () => {
     const input = '/createProject()';
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
@@ -105,7 +105,7 @@ Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, ad
 Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
 } writeProjectFile!`;
 
-    const directives = parse(input, symbols());
+    const directives = parse(input, defaults);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
@@ -149,24 +149,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros
 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
 📜✨ writeProjectFile ⚡️
     `;
-    const directives = parse(input, {
-      directive: {
-        start: '🪄✨ ',
-        end: '⚡️'
-      },
-      attributes: {
-        start: '✨🌟⭐️',
-        separator: '✨💫✨',
-        end: '⭐️🌟✨'
-      },
-      pair: {
-        separator: ' 🔮 '
-      },
-      body: {
-        start: '✨📜',
-        end: '📜✨'
-      }
-    });
+    const directives = parse(input, customs);
     expect(directives).to.deep.equal([
       {
         action: 'createProject',
