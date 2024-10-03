@@ -62,6 +62,11 @@ export const bodiless = fixture(
   ]
 );
 
+export const argumentless = fixture(
+  '/listProjects()',
+  [{ action: 'listProjects', attributes: {}, body: undefined }]
+);
+
 export const multiparagraph = fixture(
   `/createProject(name:lorem-ipsum)
     
