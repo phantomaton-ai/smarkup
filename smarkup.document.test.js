@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import document from './smarkup.document.js';
-import { symbols } from './smarkup.symbols.js';
+import symbols from './smarkup.symbols.js';
 
 describe('Smarkup Documentation', () => {
   it('generates documentation with default symbols', () => {
