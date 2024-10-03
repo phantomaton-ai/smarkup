@@ -5,6 +5,12 @@ const bodied = { ...bodiless, body: 'This is the content of the directive body.'
 const document = ({ directive, attributes, body, pair }, render) => `
 Smarkup is a lightweight markup language for embedding directives in plain-text document formats.
 
+A directive has three parts:
+
+* The directive name; a camel-case string identifyng which action is being performed.
+* The directive arguments; key-value pairs parameterizing the action.
+* The directive body; a block of free text (such as file contents).
+
 **Directive with no arguments and no body**:
 \`${render([simple])}\`
 
