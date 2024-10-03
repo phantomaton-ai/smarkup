@@ -21,7 +21,7 @@ class Smarkup {
   }
 
   document() {
-    return document(this.symbols());
+    return document(this.symbols(), directives => this.render(directives));
   }
 }
 

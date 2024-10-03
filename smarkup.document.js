@@ -1,28 +1,22 @@
-import symbols from './smarkup.symbols.js';
+const simple = { action: 'directiveName', attributes: {}, body: undefined };
+const bodiless = { ...simple, attributes: { arg1: 'value1', arg2: 'value2' } };
+const bodied = { ...bodiless, body: 'This is the content of the directive body.' };
 
-const document = (symbolConfig) => {
-  return `
-# Smarkup Syntax
-
+const document = ({ directive, attributes, body, pair }, render) => `
 Smarkup is a lightweight markup language for embedding directives in plain-text document formats.
 
-## Directive Syntax
-
 **Directive with no arguments and no body**:
-\`${symbolConfig.directive.start}directiveName()${symbolConfig.directive.end}\`
+\`${render([simple])}\`
 
 **Directive with arguments and no body**:
-\`${symbolConfig.directive.start}directiveName(${symbolConfig.attributes.start}arg1:value1, arg2:value2${symbolConfig.attributes.end})${symbolConfig.directive.end}\`
+\`${render([bodiless])}\`
 
 **Directive with arguments and a body**:
-\`${symbolConfig.directive.start}directiveName(${symbolConfig.attributes.start}arg1:value1, arg2:value2${symbolConfig.attributes.end}) ${symbolConfig.body.start}
-This is the content of the directive body.
-${symbolConfig.body.end} directiveName${symbolConfig.directive.end}\`
+\`${render([bodied])}\`
 
-The directive starts with the \`${symbolConfig.directive.start}\` symbol, followed by the directive name. If the directive has attributes, they are enclosed in \`${symbolConfig.attributes.start}\` and \`${symbolConfig.attributes.end}\` and separated by \`${symbolConfig.attributes.separator}\`. The key-value pairs for the attributes are separated by \`${symbolConfig.pair.separator}\`.
+The directive starts with the \`${directive.start}\` symbol, followed by the camel-case directive name. If the directive has attributes, they are enclosed in \`${attributes.start}\` and \`${attributes.end}\` and separated by \`${attributes.separator}\`. The key-value pairs for the attributes are separated by \`${pair.separator}\`.
 
-If the directive has a body, it is enclosed between \`${symbolConfig.body.start}\` and \`${symbolConfig.body.end}\`, and the directive name is repeated at the end, followed by the \`${symbolConfig.directive.end}\` symbol.
+If the directive has a body, it is enclosed between \`${body.start}\` and \`${body.end}\`, and the directive name is repeated at the end, followed by the \`${directive.end}\` symbol.
 `;
-};
 
 export default document;
