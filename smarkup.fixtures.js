@@ -42,7 +42,7 @@ export const multiple = fixture(
 );
 
 export const bodiless = fixture(
-  '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt)',
+  '/createProject(name:test)\n/writeProjectFile(project:test,file:example.txt)',
   [
     {
       action: 'createProject',
