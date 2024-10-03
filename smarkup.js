@@ -20,8 +20,8 @@ class Smarkup {
     return render(directives, this.symbols());
   }
 
-  static document() {
-    return document(symbols(this.options?.symbols));
+  document() {
+    return document(this.symbols());
   }
 }
 
