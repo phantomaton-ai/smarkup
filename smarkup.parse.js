@@ -36,4 +36,4 @@ const parse = (input, symbols) => {
   return dir;
 };
 
-export { parse };
+export default parse;

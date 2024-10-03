@@ -1,21 +1,23 @@
+import parse from './smarkup.parse.js';
+import render from './smarkup.render.js';
 import symbols from './smarkup.symbols.js';
 
 class Smarkup {
   constructor(options = {}) {
-    this.symbols = this.getSymbols(options);
+    this.options = options;
   }
 
-  getSymbols(options) {
-    return symbols(options);
+  symbols() {
+    return symbols(this.options?.symbols);
   }
 
   parse(input) {
-    // Existing parse implementation
+    return parse(input, this.symbols());
   }
 
   render(directives) {
-    // Existing render implementation
+    return render(directives, this.symbols());
   }
 }
 
-export default Smarkup;
+export default options => new Smarkup(options);

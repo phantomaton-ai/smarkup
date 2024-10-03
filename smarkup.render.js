@@ -16,4 +16,4 @@ const render = (directives, symbols) => {
   }).join('\n');
 };
 
-export { render };
+export default render;

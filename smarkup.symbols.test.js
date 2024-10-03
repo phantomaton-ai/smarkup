@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { symbols } from './smarkup.symbols.js';
+import symbols from './smarkup.symbols.js';
 
 describe('Smarkup Symbols', () => {
   it('should use default symbols', () => {
