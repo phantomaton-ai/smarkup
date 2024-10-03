@@ -1,9 +1,8 @@
 import { expect } from 'chai';
 import document from './smarkup.document.js';
-import symbols from './smarkup.symbols.js';
+import { defaults, customs } from './smarkup.symbols.fixtures.js';
 
 const like = (options) => () => () => {
-  const options = symbols();
   const doc = document(options);
   expect(doc).to.be.a('string');
   expect(doc).to.contain(options.directive.start);
@@ -20,24 +19,6 @@ const like = (options) => () => () => {
 };
 
 describe('smarkup.document', () => {
-  it('generates documentation with default symbols', like(symbols()));
-
-  it('generates documentation with custom symbols', like({
-    directive: {
-      start: '🪄✨ ',
-      end: '⚡️'
-    },
-    attributes: {
-      start: '✨🌟⭐️',
-      separator: '✨💫✨',
-      end: '⭐️🌟✨'
-    },
-    pair: {
-      separator: ' 🔮 '
-    },
-    body: {
-      start: '✨📜',
-      end: '📜✨'
-    }
-  }));
+  it('generates documentation with default symbols', like(defaults));
+  it('generates documentation with custom symbols', like(customs));
 });
