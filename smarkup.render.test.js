@@ -1,98 +1,18 @@
 import { expect } from 'chai';
 import render from './smarkup.render.js';
-import symbols from './smarkup.symbols.js';
+import { simple, body, multiple, customized } from './smarkup.fixtures.js';
+
+const like = ({ directives, symbols, expected }) => () => {
+  const { text } = render(directives, symbols);
+  expect(text).to.equal(expected);
+};
 
 describe('Smarkup renderer', () => {
-  it('should render a simple directive', () => {
-    const directives = [
-      {
-        action: 'createProject',
-        attributes: {
-          name: 'test'
-        },
-        body: undefined
-      }
-    ];
-    const output = render(directives, symbols());
-    expect(output).to.equal('/createProject(name:test)');
-  });
+  it('renders a simple directive', like(simple));
 
-  it('should render a directive with a body', () => {
-    const directives = [
-      {
-        action: 'writeProjectFile',
-        attributes: {
-          project: 'smarkup',
-          file: 'example.txt'
-        },
-        body: 'This is the content.'
-      }
-    ];
-    const output = render(directives, symbols());
-    expect(output).to.equal('/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!');
-  });
+  it('renders a directive with a body', like(body));
 
-  it('should render multiple directives', () => {
-    const directives = [
-      {
-        action: 'createProject',
-        attributes: {
-          name: 'test'
-        },
-        body: undefined
-      },
-      {
-        action: 'writeProjectFile',
-        attributes: {
-          project: 'test',
-          file: 'example.txt'
-        },
-        body: 'This is the content.'
-      }
-    ];
-    const output = render(directives, symbols());
-    expect(output).to.equal('/createProject(name:test)\n/writeProjectFile(project:test,file:example.txt) {\nThis is the content.\n} writeProjectFile!');
-  });
+  it('renders multiple directives', like(multiple));
 
-  it('should handle custom symbols', () => {
-    const directives = [
-      {
-        action: 'createProject',
-        attributes: {
-          name: 'lorem-ipsum'
-        },
-        body: undefined
-      },
-      {
-        action: 'writeProjectFile',
-        attributes: {
-          project: 'lorem-ipsum',
-          file: 'lorem.txt'
-        },
-        body: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.'
-      }
-    ];
-    const options = {
-      symbols: {
-        directive: {
-          start: '🪄✨ ',
-          end: '⚡️'
-        },
-        attributes: {
-          start: '✨🌟⭐️',
-          separator: '✨💫✨',
-          end: '⭐️🌟✨'
-        },
-        pair: {
-          separator: ' 🔮 '
-        },
-        body: {
-          start: '✨📜',
-          end: '📜✨'
-        }
-      }
-    };
-    const output = render(directives, options.symbols);
-    expect(output).to.equal('🪄✨ createProject✨🌟⭐️name 🔮 lorem-ipsum⭐️🌟✨\n🪄✨ writeProjectFile✨🌟⭐️project 🔮 lorem-ipsum✨💫✨file 🔮 lorem.txt⭐️🌟✨ ✨📜\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\n📜✨ writeProjectFile⚡️');
-  });
+  it('handles custom symbols', like(customized));
 });
