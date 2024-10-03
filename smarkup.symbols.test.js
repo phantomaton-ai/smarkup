@@ -1,17 +1,17 @@
 import { expect } from 'chai';
-import { getSymbols } from './smarkup.symbols.js';
+import { symbols } from './smarkup.symbols.js';
 
 describe('Smarkup Symbols', () => {
   it('should use default symbols', () => {
-    const symbols = getSymbols();
-    expect(symbols.directive.start).to.equal('/');
-    expect(symbols.directive.end).to.equal('!');
-    expect(symbols.attributes.start).to.equal('(');
-    expect(symbols.attributes.separator).to.equal(',');
-    expect(symbols.attributes.end).to.equal(')');
-    expect(symbols.pair.separator).to.equal(':');
-    expect(symbols.body.start).to.equal('{');
-    expect(symbols.body.end).to.equal('}');
+    const symbolConfig = symbols();
+    expect(symbolConfig.directive.start).to.equal('/');
+    expect(symbolConfig.directive.end).to.equal('!');
+    expect(symbolConfig.attributes.start).to.equal('(');
+    expect(symbolConfig.attributes.separator).to.equal(',');
+    expect(symbolConfig.attributes.end).to.equal(')');
+    expect(symbolConfig.pair.separator).to.equal(':');
+    expect(symbolConfig.body.start).to.equal('{');
+    expect(symbolConfig.body.end).to.equal('}');
   });
 
   it('should override default symbols', () => {
@@ -33,15 +33,15 @@ describe('Smarkup Symbols', () => {
         end: '📜✨'
       }
     };
-    const symbols = getSymbols(options);
-    expect(symbols.directive.start).to.equal('🪄✨ ');
-    expect(symbols.directive.end).to.equal('⚡️');
-    expect(symbols.attributes.start).to.equal('✨🌟⭐️');
-    expect(symbols.attributes.separator).to.equal('✨💫✨');
-    expect(symbols.attributes.end).to.equal('⭐️🌟✨');
-    expect(symbols.pair.separator).to.equal(' 🔮 ');
-    expect(symbols.body.start).to.equal('✨📜');
-    expect(symbols.body.end).to.equal('📜✨');
+    const symbolConfig = symbols(options);
+    expect(symbolConfig.directive.start).to.equal('🪄✨ ');
+    expect(symbolConfig.directive.end).to.equal('⚡️');
+    expect(symbolConfig.attributes.start).to.equal('✨🌟⭐️');
+    expect(symbolConfig.attributes.separator).to.equal('✨💫✨');
+    expect(symbolConfig.attributes.end).to.equal('⭐️🌟✨');
+    expect(symbolConfig.pair.separator).to.equal(' 🔮 ');
+    expect(symbolConfig.body.start).to.equal('✨📜');
+    expect(symbolConfig.body.end).to.equal('📜✨');
   });
 
   it('should use default for missing options', () => {
@@ -50,14 +50,14 @@ describe('Smarkup Symbols', () => {
         start: '🪄✨ '
       }
     };
-    const symbols = getSymbols(options);
-    expect(symbols.directive.start).to.equal('🪄✨ ');
-    expect(symbols.directive.end).to.equal('!');
-    expect(symbols.attributes.start).to.equal('(');
-    expect(symbols.attributes.separator).to.equal(',');
-    expect(symbols.attributes.end).to.equal(')');
-    expect(symbols.pair.separator).to.equal(':');
-    expect(symbols.body.start).to.equal('{');
-    expect(symbols.body.end).to.equal('}');
+    const symbolConfig = symbols(options);
+    expect(symbolConfig.directive.start).to.equal('🪄✨ ');
+    expect(symbolConfig.directive.end).to.equal('!');
+    expect(symbolConfig.attributes.start).to.equal('(');
+    expect(symbolConfig.attributes.separator).to.equal(',');
+    expect(symbolConfig.attributes.end).to.equal(')');
+    expect(symbolConfig.pair.separator).to.equal(':');
+    expect(symbolConfig.body.start).to.equal('{');
+    expect(symbolConfig.body.end).to.equal('}');
   });
 });
