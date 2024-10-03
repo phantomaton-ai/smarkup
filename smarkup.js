@@ -1,7 +1,7 @@
 import parse from './smarkup.parse.js';
 import render from './smarkup.render.js';
 import symbols from './smarkup.symbols.js';
-import generateDocumentation from './smarkup.document.js';
+import document from './smarkup.document.js';
 
 class Smarkup {
   constructor(options = {}) {
@@ -21,7 +21,7 @@ class Smarkup {
   }
 
   static document() {
-    return generateDocumentation(symbols(this.options?.symbols));
+    return document(symbols(this.options?.symbols));
   }
 }
 
