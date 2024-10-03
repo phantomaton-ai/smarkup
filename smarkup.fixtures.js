@@ -62,7 +62,7 @@ export const bodiless = fixture(
   ]
 );
 
-export const multilineMultiparagraph = fixture(
+export const multiparagraph = fixture(
   `/createProject(name:lorem-ipsum)
     
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
@@ -89,7 +89,7 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
   ]
 );
 
-export const customSymbols = fixture(
+export const customized = fixture(
   `🪄✨ createProject ✨🌟⭐️ name 🔮 lorem-ipsum ⭐️🌟✨
     
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.
