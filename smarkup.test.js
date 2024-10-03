@@ -3,6 +3,7 @@ import smarkup from './smarkup.js';
 import {
   simple, body, multiple, bodiless, argumentless, customized
 } from './smarkup.fixtures.js';
+import { customs, defaults } from './smarkup.symbols.fixtures.js';
 
 describe('smarkup', () => {
   describe('parser and renderer', () => {
@@ -34,55 +35,15 @@ describe('smarkup', () => {
     it('round-trips custom symbols', like(customized));
   });
 
-  describe('documentation', () => {
-    it('generates documentation', () => {
-      const instance = smarkup();
-      const doc = instance.document();
-      expect(doc).to.be.a('string');
-      const symbols = instance.symbols();
-      expect(doc).to.contain(symbols.directive.start);
-      expect(doc).to.contain(symbols.directive.end);
-      expect(doc).to.contain(symbols.attributes.start);
-      expect(doc).to.contain(symbols.attributes.separator);
-      expect(doc).to.contain(symbols.attributes.end);
-      expect(doc).to.contain(symbols.pair.separator);
-      expect(doc).to.contain(symbols.body.start);
-      expect(doc).to.contain(symbols.body.end);
-    });
+  describe('document', () => {
+    const like = (symbols) => () => {
+      const documentation = smarkup({ symbols }).document();
+      Object.values(symbols).flatMap(Object.values).forEach(symbol => {
+        expect(documentation).to.contain(symbol);
+      });
+    };
 
-    it('generates documentation with custom symbols', () => {
-      const options = {
-        symbols: {
-          directive: {
-            start: '🪄✨ ',
-            end: '⚡️'
-          },
-          attributes: {
-            start: '✨🌟⭐️',
-            separator: '✨💫✨',
-            end: '⭐️🌟✨'
-          },
-          pair: {
-            separator: ' 🔮 '
-          },
-          body: {
-            start: '✨📜',
-            end: '📜✨'
-          }
-        }
-      };
-      const instance = smarkup(options);
-      const doc = instance.document();
-      expect(doc).to.be.a('string');
-      const symbols = instance.symbols();
-      expect(doc).to.contain(symbols.directive.start);
-      expect(doc).to.contain(symbols.directive.end);
-      expect(doc).to.contain(symbols.attributes.start);
-      expect(doc).to.contain(symbols.attributes.separator);
-      expect(doc).to.contain(symbols.attributes.end);
-      expect(doc).to.contain(symbols.pair.separator);
-      expect(doc).to.contain(symbols.body.start);
-      expect(doc).to.contain(symbols.body.end);
-    });
+    it('generates documentation with default symbols', like(defaults));
+    it('generates documentation with custom symbols', like(customs));
   });
 });
