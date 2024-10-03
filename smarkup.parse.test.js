@@ -8,9 +8,9 @@ const like = ({ text, directives, symbols }) => () => {
 };
 
 describe('smarkup.parse', () => {
-  it('should parse a simple directive', like(simple));
+  it('parses a simple directive', like(simple));
 
-  it('should parse a directive with a body', like(body));
+  it('parses a directive with a body', like(body));
 
   it('should handle multiple directives', () => {
     const input = '/createProject(name:test)\n/writeProjectFile(project:test, file:example.txt) {\nThis is the content.\n} writeProjectFile!';
