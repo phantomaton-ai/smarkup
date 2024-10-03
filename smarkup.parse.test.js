@@ -11,9 +11,9 @@ const like = ({ text, directives, symbols }) => () => {
 describe('smarkup.parse', () => {
   it('parses a simple directive', like(simple));
   it('parses a directive with a body', like(body));
-  it('should handle multiple directives', like(multiple));
-  it('should handle directives with missing bodies', like(bodiless));
-  it('should handle directives with missing arguments', like(argumentless));
-  it('should handle multi-line, multi-paragraph, multi-directive messages', like(multiparagraph));
-  it('should handle custom symbols', like(customized));
+  it('parses multiple directives', like(multiple));
+  it('handles directives with missing bodies', like(bodiless));
+  it('handles directives with missing arguments', like(argumentless));
+  it('handles multi-line, multi-paragraph, multi-directive messages', like(multiparagraph));
+  it('handles custom symbols', like(customized));
 });
