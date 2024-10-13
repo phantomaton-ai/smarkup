@@ -146,3 +146,8 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
   ],
   customs
 );
+
+export const unclosed = fixture(
+  '/createProject(name:test) {',
+  []
+);

@@ -29,10 +29,6 @@ const parse = (input, symbols) => {
     }
   }
 
-  if (curr) {
-    dir.push({ ...curr, body: curr.body.join('\n') });
-  }
-
   return dir;
 };
 

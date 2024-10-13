@@ -1,9 +1,9 @@
-
 {
   "name": "smarkup",
   "version": "1.0.0",
   "main": "smarkup.js",
   "scripts": {
+    "cov": "c8 -x '*.test.*' -r html --check-coverage --lines 100 npm test",
     "test": "mocha **/*.test.js"
   },
   "type": "module",
@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "c8": "^10.1.2",
     "chai": "^5.1.1",
     "mocha": "^10.7.3"
   }
