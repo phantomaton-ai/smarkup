@@ -7,16 +7,14 @@
     "url": "https://github.com/phantomaton-ai/smarkup.git"
   },
   "scripts": {
-    "cov": "c8 -x '*.test.*' -r html --check-coverage --lines 100 npm test",
-    "test": "mocha **/*.test.js"
+    "cov": "lovecraft -c",
+    "test": "lovecraft"
   },
   "type": "module",
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "c8": "^10.1.2",
-    "chai": "^5.1.1",
-    "mocha": "^10.7.3"
+    "lovecraft": "file:../lovecraft"
   }
 }
