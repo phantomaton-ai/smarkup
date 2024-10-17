@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'lovecraft';
 import render from './smarkup.render.js';
 import { simple, body, multiple, customized } from './smarkup.fixtures.js';
 

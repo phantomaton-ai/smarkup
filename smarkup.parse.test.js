@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'lovecraft';
 import parse from './smarkup.parse.js';
 import {
   simple, body, multiple, bodiless, argumentless, multiparagraph, customized, challenging, unclosed

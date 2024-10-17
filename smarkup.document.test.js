@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'lovecraft';
 import document from './smarkup.document.js';
 import { defaults, customs } from './smarkup.symbols.fixtures.js';
 

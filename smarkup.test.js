@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'lovecraft';
 import smarkup from './smarkup.js';
 import {
   simple, body, multiple, bodiless, argumentless, customized
