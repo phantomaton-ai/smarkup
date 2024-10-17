@@ -8,6 +8,7 @@
   },
   "scripts": {
     "cov": "lovecraft -c",
+    "lint": "lovecraft -l",
     "test": "lovecraft"
   },
   "type": "module",
