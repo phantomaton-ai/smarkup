@@ -110,7 +110,7 @@ const instance = smarkup({
 });
 ```
 
-### `text` Option
+### Text
 
 If you set the `text` option to `true` when creating the Smarkup instance, the `parse` method will include a `text` property in each parsed directive object, containing the original text of the directive, including the directive syntax and body (if present). Additionally, when `text` is `true`, the `parse` method will also return objects with just a `text` property to represent standalone text blocks that are not part of any directive.
 
