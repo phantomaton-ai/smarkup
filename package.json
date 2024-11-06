@@ -16,6 +16,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "lovecraft": "file:../lovecraft"
+    "lovecraft": "^1.0.3"
   }
 }
