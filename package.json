@@ -7,8 +7,10 @@
     "url": "https://github.com/phantomaton-ai/smarkup.git"
   },
   "scripts": {
+    "all": "lovecraft -a",
     "cov": "lovecraft -c",
     "lint": "lovecraft -l",
+    "pub": "lovecraft -a -p",
     "test": "lovecraft"
   },
   "type": "module",
