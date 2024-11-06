@@ -1,10 +1,10 @@
-# smarkup 🪄
+# Smarkup 🪄
 
-smarkup is a lightweight syntax for embedding directives in plain-text document formats, such as Markdown. It is primarily intended to be used to provide custom behaviors to LLM assistants, but may be generally useful for parsing and rendering documents including directives in that form.
+Smarkup is a lightweight syntax for embedding directives in plain-text document formats, such as Markdown. It is primarily intended to be used to provide custom behaviors to LLM assistants, but may be generally useful for parsing and rendering documents including directives in that form.
 
 ## Syntax 🕸️
 
-The smarkup syntax uses directives, which are defined using the following format:
+The Smarkup syntax uses directives, which are defined using the following format:
 
 **Directive with no arguments and no body**:
 ```
@@ -29,7 +29,7 @@ If the directive has a body, it is enclosed between curly braces `{}`, and the d
 
 ## Usage 🕹️
 
-To use smarkup, you can use the `smarkup` function to parse and render the markup:
+To use Smarkup, you can use the `smarkup` function to parse and render the markup:
 
 ```javascript
 import smarkup from 'smarkup';
@@ -62,14 +62,30 @@ console.log(output);
 // } writeProjectFile!
 ```
 
-The `parse` method takes an input string of smarkup and returns an array of directive objects, each with the following properties:
+The `parse` method takes an input string of Smarkup and returns an array of directive objects, each with the following properties:
 
 - `action`: The name of the directive (e.g., `'createProject'`, `'writeProjectFile'`).
 - `attributes`: An object containing the key-value pairs of the directive arguments.
 - `body`: The content of the directive body, if any. This will be a string.
-- `text`: The original text of the directive, including the directive syntax and body (if present).
 
-The `render` method takes an array of directive objects and returns the corresponding smarkup string.
+If you set the `text` option to `true` when creating the Smarkup instance, the parsed directive objects will also include a `text` property, which contains the original text of the directive, including the directive syntax and body (if present). Additionally, when `text` is `true`, the `parse` method will also return objects with just a `text` property to represent standalone text blocks that are not part of any directive.
+
+```javascript
+const instance = smarkup({ text: true });
+const directives = instance.parse(input);
+console.log(directives);
+// Output:
+// [
+//   { action: 'createProject', attributes: { name: 'test' }, body: undefined, text: '/createProject(name:test)' },
+//   { text: '\n/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!\n' },
+//   {
+//     action: 'writeProjectFile',
+//     attributes: { project: 'smarkup', file: 'example.txt' },
+//     body: 'This is the content.',
+//     text: '/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!'
+//   }
+// ]
+```
 
 ## Configuration 🔧
 
@@ -111,7 +127,7 @@ const instance = smarkup({
 
 ## Limitations 🌀
 
-- The `smarkup` parser does not currently support comments or other advanced features.
+- The Smarkup parser does not currently support comments or other advanced features.
 - The parser is case-sensitive, so the directive names and argument keys must match exactly.
 - The parser does not perform any validation or error-checking on the input string. It is the responsibility of the user to ensure that the input is correctly formatted.
 
