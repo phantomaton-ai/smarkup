@@ -36,6 +36,7 @@ import smarkup from 'smarkup';
 
 // Parse smarkup input
 const input = `/createProject(name:test)
+We've created a project! Now, let's write an example file...
 /writeProjectFile(project:smarkup,file:example.txt) {
 This is the content.
 } writeProjectFile!`;
@@ -121,7 +122,7 @@ console.log(directives);
 // Output:
 // [
 //   { action: 'createProject', attributes: { name: 'test' }, body: undefined, text: '/createProject(name:test)' },
-//   { text: '\n/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!\n' },
+//   { text: 'We've created a project! Now, let's write an example file...' },
 //   {
 //     action: 'writeProjectFile',
 //     attributes: { project: 'smarkup', file: 'example.txt' },
