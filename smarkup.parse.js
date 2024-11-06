@@ -2,9 +2,14 @@ const parse = (input, symbols, text = false) => {
   let dir = [];
   let lines = input.split('\n');
   let curr = null;
+  let block = null;
 
   for (let line of lines) {
     if (!curr && line.startsWith(symbols.directive.start)) {
+      if (block !== null) {
+        dir.push({ text: block });
+        block = null;
+      }
       let start = symbols.directive.start.length;
       let end = line.indexOf(symbols.attributes.start, start);
       let action = line.slice(start, end).trim();
@@ -20,17 +25,23 @@ const parse = (input, symbols, text = false) => {
       if (!line.endsWith(symbols.body.start)) {
         dir.push({ ...curr, body: undefined, text: text ? line : undefined });
         curr = null;
+      } else {
+        block = line;
       }
     } else if (curr && line.split(' ').join('') === `${symbols.body.end}${curr.action}${symbols.directive.end}`) {
-      dir.push({ ...curr, body: curr.body.join('\n'), text: text ? line + '\n' + curr.body.join('\n') + `\n${symbols.body.end}${curr.action}${symbols.directive.end}` : undefined });
+      dir.push({ ...curr, body: curr.body.join('\n'), text: text ? block + '\n' + curr.body.join('\n') + `\n${symbols.body.end}${curr.action}${symbols.directive.end}` : undefined });
       curr = null;
+      block = null;
     } else if (curr) {
       curr.body.push(line);
+      block = block ? block + '\n' + line : line;
+    } else {
+      block = block ? block + '\n' + line : line;
     }
   }
 
-  if (text && curr) {
-    dir.push({ text: curr.body.join('\n') });
+  if (block !== null) {
+    dir.push({ text: block });
   }
 
   return dir;
