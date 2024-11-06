@@ -41,6 +41,10 @@ const parse = (input, symbols, text = false) => {
     }
   }
 
+  if (text && block.length > 0) {
+    dir.push({ text: block.join('\n') });
+  }
+
   return dir;
 };
 
