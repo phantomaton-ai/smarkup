@@ -1,4 +1,4 @@
-const parse = (input, symbols) => {
+const parse = (input, symbols, text = false) => {
   let dir = [];
   let lines = input.split('\n');
   let curr = null;
@@ -18,15 +18,19 @@ const parse = (input, symbols) => {
         curr.attributes[key.trim()] = value.trim();
       }
       if (!line.endsWith(symbols.body.start)) {
-        dir.push({ ...curr, body: undefined });
+        dir.push({ ...curr, body: undefined, text: text ? line : undefined });
         curr = null;
       }
     } else if (curr && line.split(' ').join('') === `${symbols.body.end}${curr.action}${symbols.directive.end}`) {
-      dir.push({ ...curr, body: curr.body.join('\n') });
+      dir.push({ ...curr, body: curr.body.join('\n'), text: text ? line + '\n' + curr.body.join('\n') + `\n${symbols.body.end}${curr.action}${symbols.directive.end}` : undefined });
       curr = null;
     } else if (curr) {
       curr.body.push(line);
     }
+  }
+
+  if (text && curr) {
+    dir.push({ text: curr.body.join('\n') });
   }
 
   return dir;
