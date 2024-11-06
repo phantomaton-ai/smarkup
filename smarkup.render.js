@@ -1,5 +1,6 @@
 const render = (directives, symbols) => {
   return directives.map(directive => {
+    if (directive.text) return directive.text;
     let output = `${symbols.directive.start}${directive.action}${symbols.attributes.start}`;
     const args = [];
     for (let [key, value] of Object.entries(directive.attributes)) {

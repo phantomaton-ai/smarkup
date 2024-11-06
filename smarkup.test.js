@@ -107,7 +107,7 @@ describe('smarkup', () => {
     it('allows the original text to be reconstructed completely', () => {
       const instance = smarkup({ text: true });
       const parsed = instance.parse(trailing.text);
-      const reconstructed = parsed.map(({ text }) => text).join('\n');
+      const reconstructed = instance.render(parsed);
       expect(reconstructed).to.equal(trailing.text);
     });
   });
