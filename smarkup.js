@@ -13,7 +13,7 @@ class Smarkup {
   }
 
   parse(input) {
-    return parse(input, this.symbols());
+    return parse(input, this.symbols(), this.options?.text);
   }
 
   render(directives) {
