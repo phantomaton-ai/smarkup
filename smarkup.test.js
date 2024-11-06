@@ -1,7 +1,7 @@
 import { expect } from 'lovecraft';
 import smarkup from './smarkup.js';
 import {
-  simple, body, multiple, bodiless, argumentless, customized, multiparagraph, challenging, unclosed
+  simple, body, multiple, bodiless, argumentless, customized, multiparagraph, trailing, challenging, unclosed
 } from './smarkup.fixtures.js';
 import { customs, defaults } from './smarkup.symbols.fixtures.js';
 
@@ -102,6 +102,13 @@ describe('smarkup', () => {
           text: '/writeProjectFile(project:test,file:example.txt) {\nThis is the content.\n} writeProjectFile!'
         }
       ]);
+    });
+
+    it('allows the original text to be reconstructed completely', () => {
+      const instance = smarkup({ text: true });
+      const parsed = instance.parse(trailing.text);
+      const reconstructed = parsed.map(({ text }) => text).join('\n');
+      expect(reconstructed).to.equal(trailing.text);
     });
   });
 });
