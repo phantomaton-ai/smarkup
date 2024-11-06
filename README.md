@@ -68,28 +68,13 @@ The `parse` method takes an input string of Smarkup and returns an array of dire
 - `attributes`: An object containing the key-value pairs of the directive arguments.
 - `body`: The content of the directive body, if any. This will be a string.
 
-If you set the `text` option to `true` when creating the Smarkup instance, the parsed directive objects will also include a `text` property, which contains the original text of the directive, including the directive syntax and body (if present). Additionally, when `text` is `true`, the `parse` method will also return objects with just a `text` property to represent standalone text blocks that are not part of any directive.
+## Options 🔧
 
-```javascript
-const instance = smarkup({ text: true });
-const directives = instance.parse(input);
-console.log(directives);
-// Output:
-// [
-//   { action: 'createProject', attributes: { name: 'test' }, body: undefined, text: '/createProject(name:test)' },
-//   { text: '\n/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!\n' },
-//   {
-//     action: 'writeProjectFile',
-//     attributes: { project: 'smarkup', file: 'example.txt' },
-//     body: 'This is the content.',
-//     text: '/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!'
-//   }
-// ]
-```
+The `smarkup` function accepts an optional `options` object, which allows you to customize the behavior and symbols used in the markup language.
 
-## Configuration 🔧
+### Symbols
 
-The `smarkup` function accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
+The `options` object should have a `symbols` property, which can contain the following keys:
 
 - `directive.start`: The symbol that marks the start of a directive.
 - `directive.end`: The symbol that marks the end of a directive.
@@ -123,6 +108,27 @@ const instance = smarkup({
     }
   }
 });
+```
+
+### `text` Option
+
+If you set the `text` option to `true` when creating the Smarkup instance, the `parse` method will include a `text` property in each parsed directive object, containing the original text of the directive, including the directive syntax and body (if present). Additionally, when `text` is `true`, the `parse` method will also return objects with just a `text` property to represent standalone text blocks that are not part of any directive.
+
+```javascript
+const instance = smarkup({ text: true });
+const directives = instance.parse(input);
+console.log(directives);
+// Output:
+// [
+//   { action: 'createProject', attributes: { name: 'test' }, body: undefined, text: '/createProject(name:test)' },
+//   { text: '\n/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!\n' },
+//   {
+//     action: 'writeProjectFile',
+//     attributes: { project: 'smarkup', file: 'example.txt' },
+//     body: 'This is the content.',
+//     text: '/writeProjectFile(project:smarkup,file:example.txt) {\nThis is the content.\n} writeProjectFile!'
+//   }
+// ]
 ```
 
 ## Limitations 🌀
