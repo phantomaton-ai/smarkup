@@ -61,7 +61,7 @@ describe('smarkup', () => {
           text: '/createProject(name:lorem-ipsum)'
         },
         {
-          text: '\n    \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.\n'
+          text: '    \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tempus eros. Fusce vel justo vel magna faucibus pretium. Nullam tempus augue eget nisl euismod, vel efficitur leo tincidunt. Quisque vel risus at eros iaculis bibendum. Morbi id tellus vel magna tincidunt luctus. Aliquam ac elementum velit.\n'
         },
         {
           action: 'writeProjectFile',
@@ -90,7 +90,7 @@ describe('smarkup', () => {
           text: '/createProject(name:test)'
         },
         {
-          text: '\n\nThis is a paragraph.\n\n'
+          text: '\nThis is a paragraph.\n'
         },
         {
           action: 'writeProjectFile',

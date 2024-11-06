@@ -2,13 +2,14 @@ const parse = (input, symbols, text = false) => {
   let dir = [];
   let lines = input.split('\n');
   let curr = null;
-  let block = null;
+  let block = [];
 
   for (let line of lines) {
+    block.push(line);
     if (!curr && line.startsWith(symbols.directive.start)) {
-      if (block !== null) {
-        dir.push({ text: block });
-        block = null;
+      if (block.length > 1) {
+        if (text) dir.push({ text: block.slice(0, block.length - 1).join('\n') });
+        block = [line];
       }
       let start = symbols.directive.start.length;
       let end = line.indexOf(symbols.attributes.start, start);
@@ -23,25 +24,21 @@ const parse = (input, symbols, text = false) => {
         curr.attributes[key.trim()] = value.trim();
       }
       if (!line.endsWith(symbols.body.start)) {
-        dir.push({ ...curr, body: undefined, text: text ? line : undefined });
+        const directive = { ...curr, body: undefined };
+        if (text) directive.text = block.join('\n');
+        dir.push(directive);
         curr = null;
-      } else {
-        block = line;
+        block = [];
       }
     } else if (curr && line.split(' ').join('') === `${symbols.body.end}${curr.action}${symbols.directive.end}`) {
-      dir.push({ ...curr, body: curr.body.join('\n'), text: text ? block + '\n' + curr.body.join('\n') + `\n${symbols.body.end}${curr.action}${symbols.directive.end}` : undefined });
+      const directive = { ...curr, body: curr.body.join('\n') };
+      if (text) directive.text = block.join('\n');
+      dir.push(directive);
       curr = null;
-      block = null;
+      block = [];
     } else if (curr) {
       curr.body.push(line);
-      block = block ? block + '\n' + line : line;
-    } else {
-      block = block ? block + '\n' + line : line;
     }
-  }
-
-  if (block !== null) {
-    dir.push({ text: block });
   }
 
   return dir;
