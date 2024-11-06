@@ -1,8 +1,8 @@
-# smarkup
+# smarkup 🪄
 
 smarkup is a lightweight syntax for embedding directives in plain-text document formats, such as Markdown. It is primarily intended to be used to provide custom behaviors to LLM assistants, but may be generally useful for parsing and rendering documents including directives in that form.
 
-## Syntax
+## Syntax 🕸️
 
 The smarkup syntax uses directives, which are defined using the following format:
 
@@ -27,7 +27,7 @@ The directive starts with a forward slash (`/`) to mark the beginning, followed 
 
 If the directive has a body, it is enclosed between curly braces `{}`, and the directive name is repeated at the end, followed by an exclamation mark (`!`) to mark the end of the directive.
 
-## Usage
+## Usage 🕹️
 
 To use smarkup, you can use the `smarkup` function to parse and render the markup:
 
@@ -67,10 +67,11 @@ The `parse` method takes an input string of smarkup and returns an array of dire
 - `action`: The name of the directive (e.g., `'createProject'`, `'writeProjectFile'`).
 - `attributes`: An object containing the key-value pairs of the directive arguments.
 - `body`: The content of the directive body, if any. This will be a string.
+- `text`: The original text of the directive, including the directive syntax and body (if present).
 
 The `render` method takes an array of directive objects and returns the corresponding smarkup string.
 
-## Configuration
+## Configuration 🔧
 
 The `smarkup` function accepts an optional `options` object, which allows you to customize the symbols used in the markup language. The `options` object should have a `symbols` property, which can contain the following keys:
 
@@ -108,12 +109,12 @@ const instance = smarkup({
 });
 ```
 
-## Limitations
+## Limitations 🌀
 
 - The `smarkup` parser does not currently support comments or other advanced features.
 - The parser is case-sensitive, so the directive names and argument keys must match exactly.
 - The parser does not perform any validation or error-checking on the input string. It is the responsibility of the user to ensure that the input is correctly formatted.
 
-## Contributing
+## Contributing 🦄
 
 If you find any issues or have suggestions for improvements, please feel free to submit a pull request or open an issue on the project's GitHub repository.
